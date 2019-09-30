@@ -9,7 +9,6 @@ class Board:
         from Coordinate import Coordinate
         rows = 10
         cols = 10
-
         x = 10
         y = 10
         self.TheBoard = [0] * x
@@ -51,4 +50,28 @@ class Board:
                     temp = self.TheBoard[i][j].getColor()
                 if j != 9:
                     print(" -> ", end = '')
+            print()
+
+    def printBoardWithTokens(self):
+        for i in range(0, 10):
+            for j in range(0, 10):
+                if self.TheBoard[i][j].getOwner().getName() != "null":
+                    print('{:^1}'.format('*'), end='')
+                elif self.TheBoard[i][j].getColor() == "black":
+                    print('{:^1}'.format('B'), end = '')
+                elif self.TheBoard[i][j].getColor() == "white":
+                    print('{:^1}'.format('W'), end='')
+                if j != 9:
+                    print(" -> ", end='')
+            print()
+
+    def printBoardOnlyTokens(self):
+        for i in range(0, 10):
+            for j in range(0, 10):
+                if self.TheBoard[i][j].getOwner().getName() != "null":
+                    print('{:^1}'.format('*'), end='')
+                else:
+                    print('{:^1}'.format('-'), end='')
+                if j != 9:
+                    print(" -> ", end='')
             print()

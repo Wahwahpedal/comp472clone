@@ -1,37 +1,47 @@
 class Player:
-    #from Board import Board
-    #from Coordinate import Coordinate
-    #isTurn = ""
-    #firstMove
-    #Board theBoard = ""
 
+    # Default Constructor
     def __init__ (self, name = None):
         self.isTurn = False
         self.firstMove = True
+        self.numberOfTokens = 30
         if name is not None:
             self.name = name
         else:
             self.name='null'
 
+    # Setter that returns a string
     def setName(name):
         self.name = name
 
+    #Setter to return if it's the player's turn?
+    def setPlayerIsTurn(isTurn):
+        this.isTurn = isTurn
+
+     # Getter that returns a string
     def getName(self):
         return self.name
 
+    #Getter that returns a boolean
     def getIsTurn(self):
         return this.isTurn
 
+    #Method used once the player has moved in the game
     def toggleFirstMove(self):
         if self.firstMove == False:
             self.firstMove = True
         else:
             self.firstMove = False
 
+    #Method to determine if the player has played yet
     def getFirstMove(self):
         return self.firstMove
 
-    def setPlayerIsTurn(isTurn):
-        this.isTurn = isTurn
-    #def placeToken(position):
-        #Need to update board when a token is placed
+    #Method to decrease the number of tokens. Used one the player has played a round
+    def decreaseTokens(self):
+        self.numberOfTokens = self.numberOfTokens - 1
+
+    #Method to determine the number of tokens the player has left
+    def getTokens(self):
+        return self.numberOfTokens
+

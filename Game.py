@@ -1,13 +1,27 @@
+import random
+
+
 class Game:
     from Board import Board
     from Player import Player
 
+    # Default Constructor
     def __init__ (self, name1=None, name2 = None):
         from Board import Board
         from Player import Player
         self.theBoard = Board()
         self.Player1 = Player(name1)
         self.Player2 = Player(name2)
+        self.currentPlayer = self.chooseFirstPlayer()
+
+    def getBoard(self):
+        return self.theBoard
+
+    def getPlayer1(self):
+        return self.Player1
+
+    def getPlayer2(self):
+        return self.Player1
 
     def printTheBoard(self):
         print(self.theBoard.printFullBoard())
@@ -15,31 +29,25 @@ class Game:
     def printTheField(self, row, column):
         print(self.theBoard.printCertainField(row, column))
 
-    def getBoard(self):
-        return self.theBoard
 
     def updateBoard(board = Board()):
         self.theBoard = board
 
     def updateGame(self, x, y, value):
         self.theBoard = self.getBoard()
-        templPlayer = self.returnPlayer1()
+        templPlayer = self.getPlayer1()
         self.Player1 = templPlayer
+        self.Player1.decreaseTokens()
         if value == 1:
             self.theBoard  = self.theBoard.updateBoard(x,y,self.Player1)
         elif value == 2:
-            templPlayer = game.returnPlayer2()
+            templPlayer = self.theBoard.getPlayer2()
             self.Player2 = templPlayer
-            self.theBoard  = updateBoard(x,y,self.Player2)
-        if templPlayer.getFirstMove() == True:
+            self.Player2.decreaseTokens()
+            self.theBoard  = self.theBoard.updateBoard(x,y,self.Player2)
+        if templPlayer.getFirstMove():
             templPlayer.toggleFirstMove()
         return self
-
-    def returnPlayer1(self):
-        return self.Player1
-
-    def returnPlayer2(self):
-        return self.Player2
 
     def setPlayer1(self, player=Player()):
         self.Player1 = player
@@ -47,10 +55,23 @@ class Game:
     def setPlayer2(self, player=Player()):
         self.Player2 = player
 
+    def chooseFirstPlayer(self):
+        value = random.randint(0,1)
+        if value == 0:
+            return self.Player1
+        else:
+            return self.Player1
+
+    def switchPlayers(self):
+        if self.currentPlayer == self.Player1:
+            self.currentPlayer == self.Player2
+        else:
+            self.currentPlayer == self.Player1
+
     def chooseToken(self):
         value = input("Enter the position where you want to place your token: ")
         length = len(value)
-        while (length != 2):
+        while length != 2:
             value = raw_input("Incorrect value entered, try again: ")
             length = len(value)
         value.split()
@@ -89,7 +110,7 @@ class Game:
         if (thePlayer.getFirstMove() == True) and (owner.getName() == 'null'):
             theGame =self.updateGame(x,y,value)
             return theGame
-    # #Need to try again if opponent has place one already
+            # #Need to try again if opponent has place one already
         else:
             corner1x = x-1
             corner1y = y-1
@@ -115,38 +136,8 @@ class Game:
                 if owner == thePlayer:
                     theGame = self.updateGame(x,y,value)
             if (corner4x >= 0 and corner4y >= 0):
-                print("TESTING")
                 coordinateToVerify = board.returnCoordinate(corner4x,corner4y)
                 owner = coordinateToVerify.getOwner()
                 if owner == thePlayer:
                     theGame = self.updateGame(x,y,value)
             return theGame
-
-
-#from Board import Board
-from Game import Game
-#from Player import Player
-startGame = Game("PlayerOne","PlayerTwo") #type game
-board = startGame.getBoard()
-firstPlayer = startGame.returnPlayer1()
-secondplayer = startGame.returnPlayer2()
-startGame.getBoard().printBoardColors()
-
-print("=====")
-
-# #This is for testing
-newGame = startGame.placeToken(1,2,1)
-newBoard = newGame.getBoard()
-newCoordinate = newBoard.returnCoordinate(1,2)
-owner = newCoordinate.getOwner()
-print(owner.getName(), "testing to see if correct owner prints")
-print("New owner is", newCoordinate.getOwner().getName())
-print(firstPlayer.getFirstMove(), "shoud be no")
-nextRound = newGame.placeToken(0,4,1)
-newBoard = nextRound.getBoard()
-coordinateX = board.returnCoordinate(0,1)
-print(type(coordinateX.getOwner()))
-ownerX = coordinateX.getOwner()
-print("New owner is", coordinateX.getOwner().getName())
-value = input("Enter the position where you want to place your token: ")
-startGame.chooseToken()

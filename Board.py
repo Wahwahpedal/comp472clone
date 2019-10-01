@@ -5,7 +5,7 @@ class Board:
     from Coordinate import Coordinate
     from Player import Player
 
-    #Constructor that initializes the board to be a 2D-Array of type coordinates
+    # Constructor that initializes the board to be a 2D-Array of type coordinates
     def __init__ (self):
         from Coordinate import Coordinate
         rows = 10
@@ -26,17 +26,21 @@ class Board:
                 elif ((a%2) == 1 and (b%2) == 0):
                     self.TheBoard[a][b] = Coordinate("white")
 
-    #Getter that returns an object of type coordinate
+    # Getter that returns an object of type coordinate
     def getCoordinate(self, row, column):
         return self.TheBoard[row][column]
 
-    def printCertainField(self, row, column):
-        print(self.TheBoard[row][column])
-
+    # Method that updates the board
     def updateBoard(self, x, y, player):
         self.TheBoard[x][y].setOwner(player)
         return self
 
+    # Method that prints a certain field on a board
+    def printCertainField(self, row, column):
+        print(self.TheBoard[row][column])
+
+    # Method that prints the colors on the board
+    # NOTE: MIGHT NOT BE NEEDED
     def printBoardColors(self):
         for i in range(0,10):
             for j in range(0,10):
@@ -51,6 +55,7 @@ class Board:
                     print(" -> ", end = '')
             print()
 
+    # NOTE: MIGHT NOT BE NEEDED
     def printBoardWithTokens(self):
         for i in range(0, 10):
             for j in range(0, 10):
@@ -64,6 +69,7 @@ class Board:
                     print(" -> ", end='')
             print()
 
+    # NOTE: MIGHT NOT BE NEEDED
     def printBoardOnlyTokens(self):
         for i in range(0, 10):
             for j in range(0, 10):

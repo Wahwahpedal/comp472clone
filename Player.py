@@ -14,18 +14,18 @@ class Player:
     def setName(name):
         self.name = name
 
-    #Setter to return if it's the player's turn?
+    # Setter to return if it's the player's turn?
     def setPlayerIsTurn(isTurn):
         this.isTurn = isTurn
 
     def setNumberOfTokens(self, value):
         self.numberOfTokens = value
 
-     # Getter that returns a string
+    # Getter that returns a string
     def getName(self):
         return self.name
 
-    #Getter that returns a boolean
+    # Getter that returns a boolean
     def getIsTurn(self):
         return this.isTurn
 

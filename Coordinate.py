@@ -1,7 +1,7 @@
 class Coordinate:
     from Player import Player
 
-    #Default constructor
+    # Default constructor
     def __init__(self, color=None, owner = Player()):
         if color is not None:
             self.color = color

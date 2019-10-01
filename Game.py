@@ -15,41 +15,41 @@ class Game:
         self.lastPieceXCoordinate = "null"
         self.lastPieceYCoordinate = "null"
 
-    #Getter that returns an object of type board
+    # Getter that returns an object of type board
     def getBoard(self):
         return self.theBoard
 
-    #Getter that returns an object of type player
+    # Getter that returns an object of type player
     def getPlayer1(self):
         return self.Player1
 
-    #Getter that returns an object of type player
+    # Getter that returns an object of type player
     def getPlayer2(self):
         return self.Player1
 
-    #Setter that sets player1
+    # Setter that sets player1
     def setPlayer1(self, player=Player()):
         self.Player1 = player
 
-    #Setter that sets player2
+    # Setter that sets player2
     def setPlayer2(self, player=Player()):
         self.Player2 = player
 
-    #Helper Method to get the opposite player
+    # Helper Method to get the opposite player
     def getOppoent(self, player = Player()):
         if player == self.Player1:
             return self.Player2
         return self.Player1
 
-    #Method used for testing if the coordinate of a board was updated
+    # Method used for testing if the coordinate of a board was updated
     def printTheField(self, row, column):
         print(self.theBoard.printCertainField(row, column))
 
-    #Method to update the board of the game
+    # Method to update the board of the game
     def updateBoard(board = Board()):
         self.theBoard = board
 
-    #Method that randomly chooses the play who should start
+    # Method that randomly chooses the play who should start
     def chooseFirstPlayer(self):
         value = random.randint(1,2)
         if value == 1:
@@ -57,14 +57,14 @@ class Game:
         else:
             return self.Player1
 
-    #Method that changes the turn of the player
+    # Method that changes the turn of the player
     def switchPlayers(self):
         if self.currentPlayer == self.Player1:
             self.currentPlayer = self.Player2
         else:
             self.currentPlayer = self.Player1
 
-    #Method that runs the game until at least one player has used up all their tokens
+    # Method that runs the game until at least one player has used up all their tokens
     def playGame(self):
         while (self.Player1.getTokens() != 0 or self.Player2.getTokens() != 0):
             value = 0
@@ -80,7 +80,7 @@ class Game:
             self.switchPlayers()
         print("The winner is", self.currentPlayer)
 
-    #Method to determine if there is a winner
+    # Method to determine if there is a winner
     def isWinner(self, player = Player()):
         #NOTE: This is not calculating correctly, it needs to do it around all adjacent ones
         x = int(self.lastPieceXCoordinate)
@@ -111,7 +111,7 @@ class Game:
                 return True
         return False
 
-    #Helper method that asks the user for the position where they want to place the token
+    # Helper method that asks the user for the position where they want to place the token
     def chooseToken(self):
         value = input("Enter the position where you want to place your token: ")
         length = len(value)
@@ -145,7 +145,7 @@ class Game:
         x = int(x)
         return x, y
 
-    #Helper method to place a token on the board
+    # Helper method to place a token on the board
     def placeToken(self, value):
         board = self.getBoard()
         theGame = "null"
@@ -201,7 +201,7 @@ class Game:
         self.lastPieceYCoordinate = int(y)
         return theGame
 
-    #Helper method that updates the game
+    # Helper method that updates the game
     def updateGame(self, x, y, value):
         self.theBoard = self.getBoard()
         coordinate = self.theBoard.getCoordinate(x, y)

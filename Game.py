@@ -34,10 +34,6 @@ class Game:
     def setPlayer2(self, player=Player()):
         self.Player2 = player
 
-    #Method that prints the board
-    def printTheBoard(self):
-        print(self.theBoard.printFullBoard())
-
     #Method used for testing if the coordinate of a board was updated
     def printTheField(self, row, column):
         print(self.theBoard.printCertainField(row, column))
@@ -113,7 +109,7 @@ class Game:
         theGame = "null"
         while theGame == "null":
             x, y = self.chooseToken()
-            theCoordinates = board.returnCoordinate(x, y)
+            theCoordinates = board.getCoordinate(x, y)
             owner = theCoordinates.getOwner()
             #thePlayer
             if value == 1:
@@ -123,7 +119,7 @@ class Game:
             if (thePlayer.getFirstMove() == True) and (owner.getName() == 'null'):
                 theGame =self.updateGame(x,y,value)
                 board = theGame.getBoard()
-                theCoordinates = board.returnCoordinate(x, y)
+                theCoordinates = board.getCoordinate(x, y)
                 return theGame
             # #Need to try again if opponent has place one already
             else:
@@ -136,24 +132,24 @@ class Game:
                 corner4x = x+1
                 corner4y = y+1
                 if corner1x >= 0 and corner1y >= 0:
-                    coordinateToVerify = board.returnCoordinate(corner1x,corner1y)
+                    coordinateToVerify = board.getCoordinate(corner1x, corner1y)
                     owner = coordinateToVerify.getOwner().getName()
                     print(owner)
                     print(self.Player1.getName())
                     if owner == thePlayer.getName():
                         theGame = self.updateGame(x,y,value)
                 if corner2x <= 9 and corner2y <= 9:
-                    coordinateToVerify = board.returnCoordinate(corner2x,corner2y)
+                    coordinateToVerify = board.getCoordinate(corner2x, corner2y)
                     owner = coordinateToVerify.getOwner()
                     if owner == thePlayer:
                         theGame = self.updateGame(x,y,value)
                 if corner3x >= 0 and corner3y >= 0:
-                    coordinateToVerify = board.returnCoordinate(corner3x,corner3y)
+                    coordinateToVerify = board.getCoordinate(corner3x, corner3y)
                     owner = coordinateToVerify.getOwner()
                     if owner == thePlayer:
                         theGame = self.updateGame(x,y,value)
                 if corner4x <= 9 and corner4y <= 9:
-                    coordinateToVerify = board.returnCoordinate(corner4x,corner4y)
+                    coordinateToVerify = board.getCoordinate(corner4x, corner4y)
                     owner = coordinateToVerify.getOwner()
                     if owner == thePlayer:
                         theGame = self.updateGame(x,y,value)
@@ -164,7 +160,7 @@ class Game:
     #Helper method that updates the game
     def updateGame(self, x, y, value):
         self.theBoard = self.getBoard()
-        coordinate = self.theBoard.returnCoordinate(x,y)
+        coordinate = self.theBoard.getCoordinate(x, y)
         if value == 1:
             self.theBoard = self.theBoard.updateBoard(x,y,self.Player1)
             self.Player1.decreaseTokens()

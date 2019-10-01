@@ -82,7 +82,7 @@ class Game:
 
     #Method to determine if there is a winner
     def isWinner(self, player = Player()):
-        #NOTE: This is not calculating correcting, it needs to do it around all adjacent ones
+        #NOTE: This is not calculating correctly, it needs to do it around all adjacent ones
         x = int(self.lastPieceXCoordinate)
         y = int(self.lastPieceYCoordinate)
         corner1x = x - 1

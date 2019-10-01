@@ -45,7 +45,6 @@ class Game:
             self.Player1.decreaseTokens()
             if self.Player1.getFirstMove():
                 self.Player1.toggleFirstMove()
-                print("TEST", self.Player1.getFirstMove())
         elif value == 2:
             self.Player2.decreaseTokens()
             self.theBoard  = self.theBoard.updateBoard(x,y,self.Player2)
@@ -60,18 +59,33 @@ class Game:
         self.Player2 = player
 
     def chooseFirstPlayer(self):
-        value = random.randint(0,1)
-        if value == 0:
+        value = random.randint(1,2)
+        if value == 1:
             return self.Player1
         else:
             return self.Player1
 
     def switchPlayers(self):
         if self.currentPlayer == self.Player1:
-            self.currentPlayer == self.Player2
+            self.currentPlayer = self.Player2
         else:
-            self.currentPlayer == self.Player1
+            self.currentPlayer = self.Player1
 
+    #Method that runs the game until at least one player has used up all their tokens
+    #NOTE: Need to modify to include that the game should be stopped if there's an X
+    def playGame(self):
+        while (self.Player1.getTokens() != 0 or self.Player2.getTokens() != 0):
+            value = 0
+            if self.currentPlayer is self.Player1:
+                value = 1
+            if self.currentPlayer is self.Player2:
+                value = 2
+            print("It is", self.currentPlayer.getName(), "'s turn.")
+            self.placeToken(value)
+            self.getBoard().printBoardOnlyTokens()
+            self.switchPlayers()
+
+    #Helper method that asks the user for the position where they want to place the token
     def chooseToken(self):
         value = input("Enter the position where you want to place your token: ")
         length = len(value)
@@ -105,6 +119,7 @@ class Game:
         x = int(x)
         return x, y
 
+    #Helper method to place a token on the board
     def placeToken(self, value):
         board = self.getBoard()
         theGame = "null"
@@ -112,6 +127,7 @@ class Game:
             x, y = self.chooseToken()
             theCoordinates = board.returnCoordinate(x, y)
             owner = theCoordinates.getOwner()
+            #thePlayer
             if value == 1:
                 thePlayer = self.Player1
             if value == 2:

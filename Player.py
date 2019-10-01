@@ -8,7 +8,7 @@ class Player:
         if name is not None:
             self.name = name
         else:
-            self.name='null'
+            self.name = 'null'
 
     # Setter that returns a string
     def setName(name):
@@ -17,6 +17,9 @@ class Player:
     #Setter to return if it's the player's turn?
     def setPlayerIsTurn(isTurn):
         this.isTurn = isTurn
+
+    def setNumberOfTokens(self, value):
+        self.numberOfTokens = value
 
      # Getter that returns a string
     def getName(self):
@@ -39,7 +42,8 @@ class Player:
 
     #Method to decrease the number of tokens. Used one the player has played a round
     def decreaseTokens(self):
-        self.numberOfTokens = self.numberOfTokens - 1
+        value = self.numberOfTokens - 1
+        self.setNumberOfTokens(value)
 
     #Method to determine the number of tokens the player has left
     def getTokens(self):

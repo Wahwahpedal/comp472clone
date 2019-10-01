@@ -6,7 +6,7 @@ class Game:
     from Player import Player
 
     # Default Constructor
-    def __init__ (self, name1=None, name2 = None):
+    def __init__ (self, name1, name2):
         from Board import Board
         from Player import Player
         self.theBoard = Board()
@@ -29,24 +29,28 @@ class Game:
     def printTheField(self, row, column):
         print(self.theBoard.printCertainField(row, column))
 
-
     def updateBoard(board = Board()):
         self.theBoard = board
 
+    def updateWholeGame(self, board = Board(), player1 = Player(), player2 = Player()):
+        self.theBoard = board
+        self.Player1 = player1
+        self.Player2 = player2
+
     def updateGame(self, x, y, value):
         self.theBoard = self.getBoard()
-        templPlayer = self.getPlayer1()
-        self.Player1 = templPlayer
-        self.Player1.decreaseTokens()
+        coordinate = self.theBoard.returnCoordinate(x,y)
         if value == 1:
-            self.theBoard  = self.theBoard.updateBoard(x,y,self.Player1)
+            self.theBoard = self.theBoard.updateBoard(x,y,self.Player1)
+            self.Player1.decreaseTokens()
+            if self.Player1.getFirstMove():
+                self.Player1.toggleFirstMove()
+                print("TEST", self.Player1.getFirstMove())
         elif value == 2:
-            templPlayer = self.theBoard.getPlayer2()
-            self.Player2 = templPlayer
             self.Player2.decreaseTokens()
             self.theBoard  = self.theBoard.updateBoard(x,y,self.Player2)
-        if templPlayer.getFirstMove():
-            templPlayer.toggleFirstMove()
+            if self.Player2.getFirstMove():
+                self.Player2.toggleFirstMove()
         return self
 
     def setPlayer1(self, player=Player()):
@@ -97,47 +101,58 @@ class Game:
         if value[0] == 'J' or value[0] == 'j':
             x = 9
         y = value[1]
+        y = int(y)
+        x = int(x)
+        return x, y
 
-    def placeToken(self, x, y, value):
+    def placeToken(self, value):
         board = self.getBoard()
-        theCoordinates = board.returnCoordinate(x,y)
-        owner = theCoordinates.getOwner()
-        print(theCoordinates.getOwner().getName())
-        if value == 0:
-            thePlayer = self.Player1
-        else:
-            thePlayer = self.Player2
-        if (thePlayer.getFirstMove() == True) and (owner.getName() == 'null'):
-            theGame =self.updateGame(x,y,value)
-            return theGame
+        theGame = "null"
+        while theGame == "null":
+            x, y = self.chooseToken()
+            theCoordinates = board.returnCoordinate(x, y)
+            owner = theCoordinates.getOwner()
+            if value == 1:
+                thePlayer = self.Player1
+            if value == 2:
+                thePlayer = self.Player2
+            if (thePlayer.getFirstMove() == True) and (owner.getName() == 'null'):
+                theGame =self.updateGame(x,y,value)
+                board = theGame.getBoard()
+                theCoordinates = board.returnCoordinate(x, y)
+                return theGame
             # #Need to try again if opponent has place one already
-        else:
-            corner1x = x-1
-            corner1y = y-1
-            corner2x = x-1
-            corner2y = y+1
-            corner3x = x+1
-            corner3y = y-1
-            corner4x = x+1
-            corner4y = y+1
-            if (corner1x >= 0 and corner1y >= 0):
-                coordinateToVerify = board.returnCoordinate(corner1x,corner1y)
-                owner = coordinateToVerify.getOwner()
-                if owner == thePlayer:
-                    theGame = self.updateGame(x,y,value)
-            if (corner2x >= 0 and corner2y >= 0):
-                coordinateToVerify = board.returnCoordinate(corner2x,corner2y)
-                owner = coordinateToVerify.getOwner()
-                if owner == thePlayer:
-                    theGame = self.updateGame(x,y,value)
-            if (corner3x >= 0 and corner3y >= 0):
-                coordinateToVerify = board.returnCoordinate(corner3x,corner3y)
-                owner = coordinateToVerify.getOwner()
-                if owner == thePlayer:
-                    theGame = self.updateGame(x,y,value)
-            if (corner4x >= 0 and corner4y >= 0):
-                coordinateToVerify = board.returnCoordinate(corner4x,corner4y)
-                owner = coordinateToVerify.getOwner()
-                if owner == thePlayer:
-                    theGame = self.updateGame(x,y,value)
-            return theGame
+            else:
+                corner1x = x-1
+                corner1y = y-1
+                corner2x = x-1
+                corner2y = y+1
+                corner3x = x+1
+                corner3y = y-1
+                corner4x = x+1
+                corner4y = y+1
+                if corner1x >= 0 and corner1y >= 0:
+                    coordinateToVerify = board.returnCoordinate(corner1x,corner1y)
+                    owner = coordinateToVerify.getOwner().getName()
+                    print(owner)
+                    print(self.Player1.getName())
+                    if owner == thePlayer.getName():
+                        theGame = self.updateGame(x,y,value)
+                if corner2x <= 9 and corner2y <= 9:
+                    coordinateToVerify = board.returnCoordinate(corner2x,corner2y)
+                    owner = coordinateToVerify.getOwner()
+                    if owner == thePlayer:
+                        theGame = self.updateGame(x,y,value)
+                if corner3x >= 0 and corner3y >= 0:
+                    coordinateToVerify = board.returnCoordinate(corner3x,corner3y)
+                    owner = coordinateToVerify.getOwner()
+                    if owner == thePlayer:
+                        theGame = self.updateGame(x,y,value)
+                if corner4x <= 9 and corner4y <= 9:
+                    coordinateToVerify = board.returnCoordinate(corner4x,corner4y)
+                    owner = coordinateToVerify.getOwner()
+                    if owner == thePlayer:
+                        theGame = self.updateGame(x,y,value)
+            if theGame == "null":
+                print("Invalid Move. Please try again")
+        return theGame

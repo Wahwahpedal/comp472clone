@@ -67,7 +67,7 @@ class Board:
     def printBoardOnlyTokens(self):
         for i in range(0, 10):
             for j in range(0, 10):
-                if self.TheBoard[i][j].getOwner().getName() != "null":
+                if self.TheBoard[i][j].getOwner().getName() != "null": ## Should be fixed based off the player
                     print('{:^1}'.format('*'), end='')
                 else:
                     print('{:^1}'.format('-'), end='')

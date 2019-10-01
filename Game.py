@@ -1,6 +1,5 @@
 import random
 
-
 class Game:
     from Board import Board
     from Player import Player
@@ -13,6 +12,8 @@ class Game:
         self.Player1 = Player(name1)
         self.Player2 = Player(name2)
         self.currentPlayer = self.chooseFirstPlayer()
+        self.lastPieceXCoordinate = "null"
+        self.lastPieceYCoordinate = "null"
 
     #Getter that returns an object of type board
     def getBoard(self):
@@ -34,6 +35,12 @@ class Game:
     def setPlayer2(self, player=Player()):
         self.Player2 = player
 
+    #Helper Method to get the opposite player
+    def getOppoent(self, player = Player()):
+        if player == self.Player1:
+            return self.Player2
+        return self.Player1
+
     #Method used for testing if the coordinate of a board was updated
     def printTheField(self, row, column):
         print(self.theBoard.printCertainField(row, column))
@@ -42,6 +49,7 @@ class Game:
     def updateBoard(board = Board()):
         self.theBoard = board
 
+    #Method that randomly chooses the play who should start
     def chooseFirstPlayer(self):
         value = random.randint(1,2)
         if value == 1:
@@ -49,6 +57,7 @@ class Game:
         else:
             return self.Player1
 
+    #Method that changes the turn of the player
     def switchPlayers(self):
         if self.currentPlayer == self.Player1:
             self.currentPlayer = self.Player2
@@ -56,7 +65,6 @@ class Game:
             self.currentPlayer = self.Player1
 
     #Method that runs the game until at least one player has used up all their tokens
-    #NOTE: Need to modify to include that the game should be stopped if there's an X
     def playGame(self):
         while (self.Player1.getTokens() != 0 or self.Player2.getTokens() != 0):
             value = 0
@@ -66,8 +74,42 @@ class Game:
                 value = 2
             print("It is", self.currentPlayer.getName(), "'s turn.")
             self.placeToken(value)
-            self.getBoard().printBoardOnlyTokens()
+            if self.isWinner(self.currentPlayer):
+                break
+            self.printGame()
             self.switchPlayers()
+        print("The winner is", self.currentPlayer)
+
+    #Method to determine if there is a winner
+    def isWinner(self, player = Player()):
+        #NOTE: This is not calculating correcting, it needs to do it around all adjacent ones
+        x = int(self.lastPieceXCoordinate)
+        y = int(self.lastPieceYCoordinate)
+        corner1x = x - 1
+        corner1y = y - 1
+        corner1Owner = self.getBoard().getCoordinate(corner1x, corner1y).getOwner()
+        corner2x = x - 1
+        corner2y = y + 1
+        corner2Owner = self.getBoard().getCoordinate(corner2x, corner2y).getOwner()
+        corner3x = x + 1
+        corner3y = y - 1
+        corner3Owner = self.getBoard().getCoordinate(corner3x, corner3y).getOwner()
+        corner4x = x + 1
+        corner4y = y + 1
+        corner4Owner = self.getBoard().getCoordinate(corner4x, corner4y).getOwner()
+        crossOneX = x
+        crossOneY = y-1
+        crossOneOwner = self.getBoard().getCoordinate(crossOneX, crossOneY).getOwner()
+        crossTwoX = x
+        crossOneY = y+1
+        crossTwoOwner = self.getBoard().getCoordinate(crossTwoX, crossOneY).getOwner()
+        playerToVerify = player
+        if playerToVerify == corner1Owner and playerToVerify == corner2Owner and playerToVerify == corner3Owner and playerToVerify == corner4Owner:
+            # Verifies if the other player has crossed out the X
+            opponent = self.getOppoent(player)
+            if crossOneOwner!= opponent and crossTwoOwner != opponent:
+                return True
+        return False
 
     #Helper method that asks the user for the position where they want to place the token
     def chooseToken(self):
@@ -155,6 +197,8 @@ class Game:
                         theGame = self.updateGame(x,y,value)
             if theGame == "null":
                 print("Invalid Move. Please try again")
+        self.lastPieceXCoordinate = int(x)
+        self.lastPieceYCoordinate = int(y)
         return theGame
 
     #Helper method that updates the game
@@ -171,4 +215,23 @@ class Game:
             self.theBoard  = self.theBoard.updateBoard(x,y,self.Player2)
             if self.Player2.getFirstMove():
                 self.Player2.toggleFirstMove()
+        self.lastPieceXCoordinate = x
+        self.lastPieceYCoordinate = y
         return self
+
+    # Method that prints the board game
+    def printGame(self):
+        theBoard = self.getBoard()
+        for i in range(0, 10):
+            for j in range(0, 10):
+                theCoordinate = theBoard.getCoordinate(i, j)
+                if theCoordinate.getOwner().getName() != "null": ## Should be fixed based off the player
+                    if theCoordinate.getOwner() == self.Player1:
+                        print('{:^1}'.format('P1'), end='')
+                    elif theCoordinate.getOwner() == self.Player2:
+                        print('{:^1}'.format('P2'), end='')
+                else:
+                    print('{:^1}'.format('-'), end='')
+                if j != 9:
+                    print(" -> ", end='')
+            print()

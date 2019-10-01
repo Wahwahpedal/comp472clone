@@ -14,49 +14,37 @@ class Game:
         self.Player2 = Player(name2)
         self.currentPlayer = self.chooseFirstPlayer()
 
+    #Getter that returns an object of type board
     def getBoard(self):
         return self.theBoard
 
+    #Getter that returns an object of type player
     def getPlayer1(self):
         return self.Player1
 
+    #Getter that returns an object of type player
     def getPlayer2(self):
         return self.Player1
 
-    def printTheBoard(self):
-        print(self.theBoard.printFullBoard())
-
-    def printTheField(self, row, column):
-        print(self.theBoard.printCertainField(row, column))
-
-    def updateBoard(board = Board()):
-        self.theBoard = board
-
-    def updateWholeGame(self, board = Board(), player1 = Player(), player2 = Player()):
-        self.theBoard = board
-        self.Player1 = player1
-        self.Player2 = player2
-
-    def updateGame(self, x, y, value):
-        self.theBoard = self.getBoard()
-        coordinate = self.theBoard.returnCoordinate(x,y)
-        if value == 1:
-            self.theBoard = self.theBoard.updateBoard(x,y,self.Player1)
-            self.Player1.decreaseTokens()
-            if self.Player1.getFirstMove():
-                self.Player1.toggleFirstMove()
-        elif value == 2:
-            self.Player2.decreaseTokens()
-            self.theBoard  = self.theBoard.updateBoard(x,y,self.Player2)
-            if self.Player2.getFirstMove():
-                self.Player2.toggleFirstMove()
-        return self
-
+    #Setter that sets player1
     def setPlayer1(self, player=Player()):
         self.Player1 = player
 
+    #Setter that sets player2
     def setPlayer2(self, player=Player()):
         self.Player2 = player
+
+    #Method that prints the board
+    def printTheBoard(self):
+        print(self.theBoard.printFullBoard())
+
+    #Method used for testing if the coordinate of a board was updated
+    def printTheField(self, row, column):
+        print(self.theBoard.printCertainField(row, column))
+
+    #Method to update the board of the game
+    def updateBoard(board = Board()):
+        self.theBoard = board
 
     def chooseFirstPlayer(self):
         value = random.randint(1,2)
@@ -172,3 +160,19 @@ class Game:
             if theGame == "null":
                 print("Invalid Move. Please try again")
         return theGame
+
+    #Helper method that updates the game
+    def updateGame(self, x, y, value):
+        self.theBoard = self.getBoard()
+        coordinate = self.theBoard.returnCoordinate(x,y)
+        if value == 1:
+            self.theBoard = self.theBoard.updateBoard(x,y,self.Player1)
+            self.Player1.decreaseTokens()
+            if self.Player1.getFirstMove():
+                self.Player1.toggleFirstMove()
+        elif value == 2:
+            self.Player2.decreaseTokens()
+            self.theBoard  = self.theBoard.updateBoard(x,y,self.Player2)
+            if self.Player2.getFirstMove():
+                self.Player2.toggleFirstMove()
+        return self

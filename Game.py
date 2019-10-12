@@ -68,7 +68,7 @@ class Game:
     # Method that runs the game until at least one player has used up all their tokens
     def playGame(self):
         count = 1
-        while self.Player1.getTokens() != 0 or self.Player2.getTokens() != 0:    #Should game allow moves after tokens finished?
+        while self.Player1.getTokens() != 0 or self.Player2.getTokens() != 0 or self.moveCount < 31 :
             value = 0
             if self.currentPlayer is self.Player1:
                 value = 1
@@ -76,62 +76,65 @@ class Game:
                 value = 2
             print("It is", self.currentPlayer.getName(), "'s turn.")
             self.chooseTokenMove(value, count)
-            #self.placeToken(value)
             count = count + 1
             if self.isWinner(self.currentPlayer):
                 break
             self.printGame()
             self.switchPlayers()
 
-        print("The winner is", self.currentPlayer)
+        print("The winner is", self.currentPlayer)  #Must check there is actually a winner and the game is not tied especially after 30 moves
 
     # Method to determine if there is a winner
     def isWinner(self, player = Player()):
-        #NOTE: This is not calculating correctly, it needs to do it around all adjacent ones
-        x = int(self.lastPieceXCoordinate)
-        y = int(self.lastPieceYCoordinate)
-        corner1x = x - 1
-        corner1y = y - 1
-        corner1Owner = self.getBoard().getCoordinate(corner1x, corner1y).getOwner()
-        corner2x = x - 1
-        corner2y = y + 1
-        corner2Owner = self.getBoard().getCoordinate(corner2x, corner2y).getOwner()
-        corner3x = x + 1
-        corner3y = y - 1
-        corner3Owner = self.getBoard().getCoordinate(corner3x, corner3y).getOwner()
-        corner4x = x + 1
-        corner4y = y + 1
-        corner4Owner = self.getBoard().getCoordinate(corner4x, corner4y).getOwner()
-        crossOneX = x
-        crossOneY = y-1
-        crossOneOwner = self.getBoard().getCoordinate(crossOneX, crossOneY).getOwner()
-        crossTwoX = x
-        crossOneY = y+1
-        crossTwoOwner = self.getBoard().getCoordinate(crossTwoX, crossOneY).getOwner()
-        playerToVerify = player
-        if playerToVerify == corner1Owner and playerToVerify == corner2Owner and playerToVerify == corner3Owner and playerToVerify == corner4Owner:
-            # Verifies if the other player has crossed out the X
-            opponent = self.getOppoent(player)
-            if crossOneOwner!= opponent and crossTwoOwner != opponent:
-                return True
-        return False
+         #NOTE: This is not calculating correctly, it needs to do it around all adjacent ones
+         x = int(self.lastPieceXCoordinate)
+         y = int(self.lastPieceYCoordinate)
+        # corner1x = x - 1
+        # corner1y = y - 1
+        # corner1Owner = self.getBoard().getCoordinate(corner1x, corner1y).getOwner()
+        # corner2x = x - 1
+        # corner2y = y + 1
+        # corner2Owner = self.getBoard().getCoordinate(corner2x, corner2y).getOwner()
+        # corner3x = x + 1
+        # corner3y = y - 1
+        # corner3Owner = self.getBoard().getCoordinate(corner3x, corner3y).getOwner()
+        # corner4x = x + 1
+        # corner4y = y + 1
+        # corner4Owner = self.getBoard().getCoordinate(corner4x, corner4y).getOwner()
+        # crossOneX = x
+        # crossOneY = y-1
+        # crossOneOwner = self.getBoard().getCoordinate(crossOneX, crossOneY).getOwner()
+        # crossTwoX = x
+        # crossOneY = y+1
+        # crossTwoOwner = self.getBoard().getCoordinate(crossTwoX, crossOneY).getOwner()
+        # playerToVerify = player
+        # if playerToVerify == corner1Owner and playerToVerify == corner2Owner and playerToVerify == corner3Owner and playerToVerify == corner4Owner:
+        #     # Verifies if the other player has crossed out the X
+        #     opponent = self.getOpponent(player)
+        #     if crossOneOwner!= opponent and crossTwoOwner != opponent:
+        #         return True
+        # return False
 
     # The Player chooses if they want to place a new token or move a token they own
     def chooseTokenMove(self, value, count):
         if count < 3:
             self.placeToken(value)
         else:
-            TokenMoveValue = input ("Do you want to place new token(N) or move an existing token(M)?")
-            if TokenMoveValue == "N" or TokenMoveValue == "n":
-                self.placeToken(value)
-            elif TokenMoveValue == 'M' or TokenMoveValue == "m":
-                if moveCount < 31: # number of moves must be 30
-                    self.move(value)
-                else:
-                    print("Game reached its number of moves ... ")
+            while True:
+                TokenMoveValue = input ("Do you want to place new token(N) or move an existing token(M)?: ")
+                if TokenMoveValue == "N" or TokenMoveValue == "n":
+                    self.placeToken(value)
+                    break
+                elif TokenMoveValue == 'M' or TokenMoveValue == "m":
+                     if moveCount < 31: # number of moves must be 30
+                        self.move(value)
+                        break
+                     else:
+                        print("Game reached its number of moves ... ")
+                        break
 
-            else:
-                print('The input is not correct')
+                else:
+                    print('The input is not correct. Please follow instructions below.')
 
     # The Method gets the coordinates of the token from player, verifies it, and move it
     def move(self, value):
@@ -148,7 +151,7 @@ class Game:
         accepted_direction = {'N', 'n', 'S', 's', 'E', 'e', 'W', 'w', 'NE', 'ne', 'Ne', 'nE', 'NW', 'nw', 'Nw', 'nW', 'SE', 'se', 'Se', 'sE', 'sW', 'Sw', 'SW', 'sw'}
 
         while True:
-            direction = input("Please enter a cardinal direction to move the token (N, S, E, W, NE, NW, SE, SW")
+            direction = input("Please enter a cardinal direction to move the token (N, S, E, W, NE, NW, SE, SW: ")
             if direction in accepted_direction:
                 break
             else:
@@ -260,33 +263,41 @@ class Game:
 
     # Helper method that asks the user for the position where they want to place the token
     def chooseCoordinates(self):
-        value = input("Enter the position where you want to place/move your token: ") #what's the format
-        length = len(value)
-        while length != 2:
-            value = raw_input("Incorrect value entered, try again: ")
+        while True:
+            value = input("Enter the position where you want to place/move your token: ")
             length = len(value)
-        value.split()
-        x = 90
+            if length != 2:
+                print("Incorrect value entered, try again.\n")
+            else:
+                value.split()
+                if -1 < int(value[1]) < 10 and 96 < ord(value[0]) < 109 or 64 < ord(value[0]) < 77:
+                    break
+                else:
+                    print("Incorrect value entered, try again.\n")
         if value[0] == 'A' or value[0] == 'a':
             x = 0
-        if value[0] == 'B' or value[0] == 'b':
+        elif value[0] == 'B' or value[0] == 'b':
             x = 1
-        if value[0] == 'C' or value[0] == 'c':
+        elif value[0] == 'C' or value[0] == 'c':
             x = 2
-        if value[0] == 'D' or value[0] == 'd':
+        elif value[0] == 'D' or value[0] == 'd':
             x = 3
-        if value[0] == 'E' or value[0] == 'e':
+        elif value[0] == 'E' or value[0] == 'e':
             x = 4
-        if value[0] == 'F' or value[0] == 'f':
+        elif value[0] == 'F' or value[0] == 'f':
             x = 5
-        if value[0] == 'G' or value[0] == 'g':
+        elif value[0] == 'G' or value[0] == 'g':
             x = 6
-        if value[0] == 'H' or value[0] == 'h':
+        elif value[0] == 'H' or value[0] == 'h':
             x = 7
-        if value[0] == 'I' or value[0] == 'i':
+        elif value[0] == 'I' or value[0] == 'i':
             x = 8
-        if value[0] == 'J' or value[0] == 'j':
+        elif value[0] == 'J' or value[0] == 'j':
             x = 9
+        elif value[0] == 'K' or value[0] == 'k':
+            x = 10
+        elif value[0] == 'L' or value[0] == 'l':
+            x = 11
         y = value[1]
         y = int(y)
         x = int(x)
@@ -300,51 +311,20 @@ class Game:
             x, y = self.chooseCoordinates()
             theCoordinates = board.getCoordinate(x, y)
             owner = theCoordinates.getOwner()
+
             #thePlayer
             if value == 1:
                 thePlayer = self.Player1
             if value == 2:
                 thePlayer = self.Player2
-            if (thePlayer.getFirstMove() == True) and (owner.getName() == 'null'):
-                theGame =self.updateGame(x,y,value)
-                board = theGame.getBoard()
-                theCoordinates = board.getCoordinate(x, y)
-                return theGame
-            # #Need to try again if opponent has place one already
-            else:
-                corner1x = x-1
-                corner1y = y-1
-                corner2x = x-1
-                corner2y = y+1
-                corner3x = x+1
-                corner3y = y-1
-                corner4x = x+1
-                corner4y = y+1
-                if corner1x >= 0 and corner1y >= 0:
-                    coordinateToVerify = board.getCoordinate(corner1x, corner1y)
-                    owner = coordinateToVerify.getOwner().getName()
 
-                    print(owner)
-                    print(self.Player1.getName())
-                    if owner == thePlayer.getName():
-                        theGame = self.updateGame(x,y,value)
-                if corner2x <= 9 and corner2y <= 9:
-                    coordinateToVerify = board.getCoordinate(corner2x, corner2y)
-                    owner = coordinateToVerify.getOwner()
-                    if owner == thePlayer:
-                        theGame = self.updateGame(x,y,value)
-                if corner3x >= 0 and corner3y >= 0:
-                    coordinateToVerify = board.getCoordinate(corner3x, corner3y)
-                    owner = coordinateToVerify.getOwner()
-                    if owner == thePlayer:
-                        theGame = self.updateGame(x,y,value)
-                if corner4x <= 9 and corner4y <= 9:
-                    coordinateToVerify = board.getCoordinate(corner4x, corner4y)
-                    owner = coordinateToVerify.getOwner()
-                    if owner == thePlayer:
-                        theGame = self.updateGame(x,y,value)
-            if theGame == "null":
+            if (owner.getName() == 'null'):
+                theGame =self.updateGame(x,y,value)
+
+            else:
                 print("Invalid Move. Please try again")
+                continue
+
         self.lastPieceXCoordinate = int(x)
         self.lastPieceYCoordinate = int(y)
         return theGame
@@ -371,7 +351,7 @@ class Game:
     # Method that prints the board game
     def printGame(self):
         theBoard = self.getBoard()
-        for i in range(0, 10):
+        for i in range(0, 12):
             for j in range(0, 10):
                 theCoordinate = theBoard.getCoordinate(i, j)
                 if theCoordinate.getOwner() == 'null':

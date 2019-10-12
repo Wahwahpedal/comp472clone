@@ -126,10 +126,10 @@ class Game:
             if (TokenMoveValue == "T" or TokenMoveValue == "t"):
                 self.placeToken(value)
             elif (TokenMoveValue == 'M' or TokenMoveValue == "m") :
-                if(moveCount < 31):
+                if(moveCount < 31): #number of moves must be 30
                     self.move(value)
                 else:
-                    print("Game reached its number of moves ... ") 
+                    print("Game reached its number of moves ... ")
 
             else:
                 print('The input is not correct')
@@ -149,7 +149,13 @@ class Game:
                 break
             else:
                 print("The token does not belong to you, please try again.")
-        direction = input("Which direction do you want to move?:\n(U)p, (D)own, (R)ight, (L)eft\n(UR)UpRight, (UL)UpLeft, (DR)DownRight,(DL)DownLeft ")
+        accepted_direction = {'U', 'u', 'D', 'd', 'R', 'r', 'L', 'l', 'UR', 'ur', 'UL', 'ul', 'DR', 'dr', 'DL', 'dl'}
+        while(True):
+            direction = input("Which direction do you want to move?:\n(U)p, (D)own, (R)ight, (L)eft\n(UR)UpRight, (UL)UpLeft, (DR)DownRight,(DL)DownLeft ")
+            if(direction in accepted_direction):
+                break;
+            else:
+                print("The direction is not correct, please try again. ")
         if (direction == 'U' or direction == 'u'):
             newCoordinate = board.getCoordinate(x-1, y)
             if newCoordinate.getOwner().getName() == 'null':
@@ -177,7 +183,6 @@ class Game:
                 theGame =self.updateGame(x,y-1,value)
                 board = theGame.getBoard()
                 return theGame
-
         elif (direction == 'UR' or direction == 'ur'):
             newCoordinate = board.getCoordinate(x-1, y+1)
             if newCoordinate.getOwner().getName() == 'null':
@@ -201,7 +206,6 @@ class Game:
             if newCoordinate.getOwner().getName() == 'null':
                 theGame =self.updateGame(x+1,y-1,value)
                 board = theGame.getBoard()
-                    #theCoordinates = board.getCoordinate(x-1, y)
                 return theGame
 
 

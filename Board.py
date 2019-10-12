@@ -80,3 +80,5 @@ class Board:
                 if j != 9:
                     print(" -> ", end='')
             print()
+
+        

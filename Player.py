@@ -4,19 +4,19 @@ class Player:
     def __init__ (self, name = None):
         self.isTurn = False
         self.firstMove = True
-        self.numberOfTokens = 30
+        self.numberOfTokens = 15
         if name is not None:
             self.name = name
         else:
             self.name = 'null'
 
     # Setter that returns a string
-    def setName(name):
+    def setName(self, name):
         self.name = name
 
     # Setter to return if it's the player's turn?
-    def setPlayerIsTurn(isTurn):
-        this.isTurn = isTurn
+    def setPlayerIsTurn(self, isTurn):
+        self.isTurn = isTurn
 
     def setNumberOfTokens(self, value):
         self.numberOfTokens = value
@@ -31,9 +31,7 @@ class Player:
 
     #Method used once the player has moved in the game
     def toggleFirstMove(self):
-        if self.firstMove == False:
-            self.firstMove = True
-        else:
+        if self.firstMove:
             self.firstMove = False
 
     #Method to determine if the player has played yet

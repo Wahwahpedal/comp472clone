@@ -46,7 +46,7 @@ class Game:
         print(self.theBoard.printCertainField(row, column))
 
     # Method to update the board of the game
-    def updateBoard(board = Board()):
+    def updateBoard(self, board = Board()):
         self.theBoard = board
 
     # Method that randomly chooses the play who should start

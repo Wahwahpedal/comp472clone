@@ -8,12 +8,12 @@ class Board:
     # Constructor that initializes the board to be a 2D-Array of type coordinates
     def __init__ (self):
         from Coordinate import Coordinate
-        x = 10
+        x = 12
         y = 10
         self.TheBoard = [0] * x
         for i in range(x):
             self.TheBoard[i] = [0] * y
-        for a in range (0,10):
+        for a in range (0,12):
             for b in range (0,10):
                 if ((a%2) == 0 and (b%2) == 0):
                     self.TheBoard[a][b] = Coordinate("black")
@@ -40,7 +40,7 @@ class Board:
     # Method that prints the colors on the board
     # NOTE: MIGHT NOT BE NEEDED
     def printBoardColors(self):
-        for i in range(0,10):
+        for i in range(0,12):
             for j in range(0,10):
                 value = self.TheBoard[i][j]
                 if self.TheBoard[i][j].getColor() == "black":
@@ -55,7 +55,7 @@ class Board:
 
     # NOTE: MIGHT NOT BE NEEDED
     def printBoardWithTokens(self):
-        for i in range(0, 10):
+        for i in range(0, 12):
             for j in range(0, 10):
                 if self.TheBoard[i][j].getOwner().getName() != "null":
                     print('{:^1}'.format('*'), end='')
@@ -69,7 +69,7 @@ class Board:
 
     # NOTE: MIGHT NOT BE NEEDED
     def printBoardOnlyTokens(self):
-        for i in range(0, 10):
+        for i in range(0, 12):
             for j in range(0, 10):
                 if self.TheBoard[i][j].getOwner().getName() != "null": ## Should be fixed based off the player
                     print('{:^1}'.format('*'), end='')

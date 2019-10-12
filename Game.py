@@ -12,6 +12,7 @@ class Game:
         self.Player1 = Player(name1)
         self.Player2 = Player(name2)
         self.currentPlayer = self.chooseFirstPlayer()
+        self.moveCount = 0
         self.lastPieceXCoordinate = "null"
         self.lastPieceYCoordinate = "null"
 
@@ -25,7 +26,7 @@ class Game:
 
     # Getter that returns an object of type player
     def getPlayer2(self):
-        return self.Player1
+        return self.Player2
 
     # Setter that sets player1
     def setPlayer1(self, player=Player()):
@@ -36,7 +37,7 @@ class Game:
         self.Player2 = player
 
     # Helper Method to get the opposite player
-    def getOppoent(self, player = Player()):
+    def getOpponent(self, player = Player()):
         if player == self.Player1:
             return self.Player2
         return self.Player1
@@ -46,7 +47,7 @@ class Game:
         print(self.theBoard.printCertainField(row, column))
 
     # Method to update the board of the game
-    def updateBoard(self, board = Board()):
+    def updateBoard(self, board = Board()):   #Do we even use this? Method similar to Board class
         self.theBoard = board
 
     # Method that randomly chooses the play who should start
@@ -55,7 +56,7 @@ class Game:
         if value == 1:
             return self.Player1
         else:
-            return self.Player1
+            return self.Player2
 
     # Method that changes the turn of the player
     def switchPlayers(self):
@@ -67,8 +68,7 @@ class Game:
     # Method that runs the game until at least one player has used up all their tokens
     def playGame(self):
         count = 1
-        while (self.Player1.getTokens() != 0 or self.Player2.getTokens() != 0):
-
+        while self.Player1.getTokens() != 0 or self.Player2.getTokens() != 0:    #Should game allow moves after tokens finished?
             value = 0
             if self.currentPlayer is self.Player1:
                 value = 1
@@ -116,17 +116,16 @@ class Game:
                 return True
         return False
 
-    #the player choose if they want to place a new token or move the one they owned
+    # The Player chooses if they want to place a new token or move a token they own
     def chooseTokenMove(self, value, count):
-        global moveCount
-        if (count == 1 or count == 2):
+        if count < 3:
             self.placeToken(value)
         else:
-            TokenMoveValue = input ("Do you want to place new token(T) or move(M)?")
-            if (TokenMoveValue == "T" or TokenMoveValue == "t"):
+            TokenMoveValue = input ("Do you want to place new token(N) or move an existing token(M)?")
+            if TokenMoveValue == "N" or TokenMoveValue == "n":
                 self.placeToken(value)
-            elif (TokenMoveValue == 'M' or TokenMoveValue == "m"):
-                if(moveCount < 31): #number of moves must be 30
+            elif TokenMoveValue == 'M' or TokenMoveValue == "m":
+                if moveCount < 31: # number of moves must be 30
                     self.move(value)
                 else:
                     print("Game reached its number of moves ... ")
@@ -134,127 +133,125 @@ class Game:
             else:
                 print('The input is not correct')
 
-    # the method gets the coordinates of the teken from player, verify and move it
+    # The Method gets the coordinates of the token from player, verifies it, and move it
     def move(self, value):
-        global moveCount
-
         board = self.getBoard()
-        theGame = "null"
-        while (True):
+        while True:
             x, y = self.chooseCoordinates()
             theCoordinates = board.getCoordinate(x, y)
             owner = theCoordinates.getOwner()
-            if (owner.getName() == self.currentPlayer.getName()):
-                #theCoordinates.setOwner('null')
+            if owner.getName() == self.currentPlayer.getName():
                 break
             else:
-                print("The token does not belong to you, please try again.")
-        accepted_direction = {'U', 'u', 'D', 'd', 'R', 'r', 'L', 'l', 'UR', 'ur', 'UL', 'ul', 'DR', 'dr', 'DL', 'dl'}
-        while(True):
-            direction = input("Which direction do you want to move?:\n(U)p, (D)own, (R)ight, (L)eft\n(UR)UpRight, (UL)UpLeft, (DR)DownRight,(DL)DownLeft ")
-            if(direction in accepted_direction):
-                break;
+                print("The token does not belong to you. Please enter another token coordinate")
+
+        accepted_direction = {'N', 'n', 'S', 's', 'E', 'e', 'W', 'w', 'NE', 'ne', 'Ne', 'nE', 'NW', 'nw', 'Nw', 'nW', 'SE', 'se', 'Se', 'sE', 'sW', 'Sw', 'SW', 'sw'}
+
+        while True:
+            direction = input("Please enter a cardinal direction to move the token (N, S, E, W, NE, NW, SE, SW")
+            if direction in accepted_direction:
+                break
             else:
-                print("The direction is not correct, please try again. ")
-        #print((x-1) >0 and (direction == 'U' or direction == 'u') )
-        if  (direction == 'U' or direction == 'u') :
+                print("The direction is not correct. Please enter another direction")
+
+        if direction == 'N' or direction == 'n':
             if (x-1) > -1:
                 newCoordinate = board.getCoordinate(x-1, y)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x-1,y,value)
                     board = theGame.getBoard()
-                    moveCount = moveCount+1
+                    self.moveCount = moveCount+1
                     return theGame
             else:
                 print("You can not have this move on this token. Please try again.")
                 self.move(value)
 
-        elif (direction == 'D' or direction == 'd'):
-            if(x+1 < 10):
+        elif direction == 'S' or direction == 's':
+            if x+1 < 10:
                 newCoordinate = board.getCoordinate(x+1, y)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x+1,y,value)
                     board = theGame.getBoard()
-                    moveCount = moveCount+1
+                    self.moveCount = moveCount+1
                     return theGame
             else:
                 print("You can not have this move on this token. Please try again.")
                 self.move(value)
 
-        elif (direction == 'R' or direction == 'r'):
-            if(y+1<10):
+        elif direction == 'E' or direction == 'e':
+            if y+1<10:
                 newCoordinate = board.getCoordinate(x, y+1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x,y+1,value)
                     board = theGame.getBoard()
-                    moveCount = moveCount+1
+                    self.moveCount = moveCount+1
                     return theGame
             else:
                 print("You can not have this move on this token. Please try again.")
                 self.move(value)
-        elif (direction == 'L' or direction == 'l'):
-            if(y-1>-1):
+        elif direction == 'W' or direction == 'w':
+            if y-1>-1:
                 newCoordinate = board.getCoordinate(x, y-1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x,y-1,value)
                     board = theGame.getBoard()
-                    moveCount = moveCount+1
+                    self.moveCount = moveCount+1
                     return theGame
             else:
                 print("You can not have this move on this token. Please try again.")
                 self.move(value)
 
-        elif (direction == 'UR' or direction == 'ur'):
-            if(x-1>-1 and y+1<10):
+        elif direction == 'NE' or direction == 'ne' or direction == 'nE' or direction == 'Ne':
+            if x-1>-1 and y+1<10:
                 newCoordinate = board.getCoordinate(x-1, y+1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x-1,y+1,value)
                     board = theGame.getBoard()
-                    moveCount = moveCount+1
+                    self.moveCount = moveCount+1
                     return theGame
             else:
                 print("You can not have this move on this token. Please try again.")
                 self.move(value)
 
-        elif (direction == 'UL' or direction == 'ul'):
-            if(x-1>-1 and y-1>-1):
+        elif direction == 'NW' or direction == 'nw' or direction == 'nW' or direction == 'Nw':
+            if x-1>-1 and y-1>-1:
                 newCoordinate = board.getCoordinate(x-1, y-1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x-1,y-1,value)
                     board = theGame.getBoard()
-                    moveCount = moveCount+1
+                    self.moveCount = moveCount+1
                     return theGame
             else:
                 print("You can not have this move on this token. Please try again.")
                 self.move(value)
 
-        elif (direction == 'DR' or direction == 'dr'):
-            if(x+1<10 and y+1<10):
+        elif direction == 'SE' or direction == 'se' or direction == 'sE' or direction == 'Se':
+            if x+1<10 and y+1<10:
                 newCoordinate = board.getCoordinate(x+1, y+1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x+1,y+1,value)
                     board = theGame.getBoard()
-                    moveCount = moveCount+1
+                    self.moveCount = moveCount+1
                     return theGame
             else:
                 print("You can not have this move on this token. Please try again.")
                 self.move(value)
 
-        elif (direction == 'DL' or direction == 'dl'):
-            if(x+1>-1 and y-1<10):
+        elif direction == 'SW' or direction == 'sw' or direction == 'sw' or direction == 'sw':
+            if x+1>-1 and y-1<10:
                 newCoordinate = board.getCoordinate(x+1, y-1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x+1,y-1,value)
                     board = theGame.getBoard()
-                    moveCount = moveCount+1
+                    self.moveCount = moveCount+1
                     return theGame
         else:
             print("You can not have this move on this token. Please try again.")
@@ -358,13 +355,13 @@ class Game:
         self.theBoard = self.getBoard()
         coordinate = self.theBoard.getCoordinate(x, y)
         if value == 1:
-            self.theBoard = self.theBoard.updateBoard(x,y,self.Player1)
+            self.theBoard = self.theBoard.updateBoardWithPlayer(x,y,self.Player1)
             self.Player1.decreaseTokens()
             if self.Player1.getFirstMove():
                 self.Player1.toggleFirstMove()
         elif value == 2:
             self.Player2.decreaseTokens()
-            self.theBoard  = self.theBoard.updateBoard(x,y,self.Player2)
+            self.theBoard  = self.theBoard.updateBoardWithPlayer(x,y,self.Player2)
             if self.Player2.getFirstMove():
                 self.Player2.toggleFirstMove()
         self.lastPieceXCoordinate = x

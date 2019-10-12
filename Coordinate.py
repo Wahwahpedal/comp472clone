@@ -11,9 +11,11 @@ class Coordinate:
     def setOwner(self, owner):
         self.owner = owner
 
+    # Method used when moving token to another place
     def releaseCoordinate(self):
-        print("inja")
         self.owner = 'null'
+        #Should we also set color to null?
+
     # Setter that sets the color of the coordinate
     def setColor(self, color):
         self.color = color

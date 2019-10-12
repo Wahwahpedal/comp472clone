@@ -8,8 +8,6 @@ class Board:
     # Constructor that initializes the board to be a 2D-Array of type coordinates
     def __init__ (self):
         from Coordinate import Coordinate
-        rows = 10
-        cols = 10
         x = 10
         y = 10
         self.TheBoard = [0] * x
@@ -31,11 +29,9 @@ class Board:
         return self.TheBoard[row][column]
 
     # Method that updates the board
-    def updateBoard(self, x, y, player):
+    def updateBoardWithPlayer(self, x, y, player):
         self.TheBoard[x][y].setOwner(player)
         return self
-
-
 
     # Method that prints a certain field on a board
     def printCertainField(self, row, column):

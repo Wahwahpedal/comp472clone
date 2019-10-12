@@ -158,12 +158,11 @@ class Game:
                 print("The direction is not correct. Please enter another direction")
 
         if direction == 'N' or direction == 'n':
-            if (x-1) > -1:
+            if x > 0:
                 newCoordinate = board.getCoordinate(x-1, y)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x-1,y,value)
-                    board = theGame.getBoard()
                     self.moveCount = moveCount+1
                     return theGame
             else:
@@ -171,12 +170,11 @@ class Game:
                 self.move(value)
 
         elif direction == 'S' or direction == 's':
-            if x+1 < 10:
+            if x < 11:
                 newCoordinate = board.getCoordinate(x+1, y)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x+1,y,value)
-                    board = theGame.getBoard()
                     self.moveCount = moveCount+1
                     return theGame
             else:
@@ -184,7 +182,7 @@ class Game:
                 self.move(value)
 
         elif direction == 'E' or direction == 'e':
-            if y+1<10:
+            if y < 9:
                 newCoordinate = board.getCoordinate(x, y+1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
@@ -195,13 +193,13 @@ class Game:
             else:
                 print("You can not have this move on this token. Please try again.")
                 self.move(value)
+
         elif direction == 'W' or direction == 'w':
-            if y-1>-1:
+            if y > 0:
                 newCoordinate = board.getCoordinate(x, y-1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x,y-1,value)
-                    board = theGame.getBoard()
                     self.moveCount = moveCount+1
                     return theGame
             else:
@@ -209,12 +207,11 @@ class Game:
                 self.move(value)
 
         elif direction == 'NE' or direction == 'ne' or direction == 'nE' or direction == 'Ne':
-            if x-1>-1 and y+1<10:
+            if x > 0 and y < 9:
                 newCoordinate = board.getCoordinate(x-1, y+1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x-1,y+1,value)
-                    board = theGame.getBoard()
                     self.moveCount = moveCount+1
                     return theGame
             else:
@@ -222,12 +219,11 @@ class Game:
                 self.move(value)
 
         elif direction == 'NW' or direction == 'nw' or direction == 'nW' or direction == 'Nw':
-            if x-1>-1 and y-1>-1:
+            if x > 0 and y > 0:
                 newCoordinate = board.getCoordinate(x-1, y-1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x-1,y-1,value)
-                    board = theGame.getBoard()
                     self.moveCount = moveCount+1
                     return theGame
             else:
@@ -235,12 +231,11 @@ class Game:
                 self.move(value)
 
         elif direction == 'SE' or direction == 'se' or direction == 'sE' or direction == 'Se':
-            if x+1<10 and y+1<10:
+            if x < 11 and y < 9:
                 newCoordinate = board.getCoordinate(x+1, y+1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x+1,y+1,value)
-                    board = theGame.getBoard()
                     self.moveCount = moveCount+1
                     return theGame
             else:
@@ -248,12 +243,11 @@ class Game:
                 self.move(value)
 
         elif direction == 'SW' or direction == 'sw' or direction == 'sw' or direction == 'sw':
-            if x+1>-1 and y-1<10:
+            if x < 11 and  y > 0:
                 newCoordinate = board.getCoordinate(x+1, y-1)
                 if newCoordinate.getOwner().getName() == 'null':
                     theCoordinates.releaseCoordinate()
                     theGame =self.updateGame(x+1,y-1,value)
-                    board = theGame.getBoard()
                     self.moveCount = moveCount+1
                     return theGame
         else:

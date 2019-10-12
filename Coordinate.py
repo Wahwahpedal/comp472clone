@@ -2,7 +2,7 @@ class Coordinate:
     from Player import Player
 
     # Default constructor
-    def __init__(self, color=None, owner = Player()):
+    def __init__(self, color=None, owner=Player()):
         if color is not None:
             self.color = color
         self.owner = owner
@@ -13,8 +13,9 @@ class Coordinate:
 
     # Method used when moving token to another place
     def releaseCoordinate(self):
-        self.owner = 'null'
-        #Should we also set color to null?
+        from Player import Player
+        self.owner = Player()
+
 
     # Setter that sets the color of the coordinate
     def setColor(self, color):

@@ -11,6 +11,9 @@ class Coordinate:
     def setOwner(self, owner):
         self.owner = owner
 
+    def releaseCoordinate(self):
+        print("inja")
+        self.owner = 'null'
     # Setter that sets the color of the coordinate
     def setColor(self, color):
         self.color = color

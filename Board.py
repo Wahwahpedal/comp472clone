@@ -35,6 +35,8 @@ class Board:
         self.TheBoard[x][y].setOwner(player)
         return self
 
+
+
     # Method that prints a certain field on a board
     def printCertainField(self, row, column):
         print(self.TheBoard[row][column])

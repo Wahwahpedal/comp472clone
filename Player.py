@@ -46,4 +46,3 @@ class Player:
     #Method to determine the number of tokens the player has left
     def getTokens(self):
         return self.numberOfTokens
-

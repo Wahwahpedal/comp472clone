@@ -1,4 +1,5 @@
 # This is the board class that creates the board for the game
+from colorama import Fore, Back, Style
 class Board:
 
     # Constructor that initializes the board to be a 2D-Array of type coordinates
@@ -35,15 +36,17 @@ class Board:
 
     # Method that prints the colors on the board
     def printBoardColors(self):
+        y_axis = ['A','B','C','D','E','F','G','H','I','J','K','L']
         for i in range(0,12):
+            print(Fore.RED + y_axis[i], end =" ")
             for j in range(0,10):
                 value = self.TheBoard[i][j]
                 if self.TheBoard[i][j].getColor() == "black":
-                    print('{:^3}'.format('B'), end = '')
+                    print(Fore.BLUE +'{:^3}'.format('B'), end = '')
                 elif self.TheBoard[i][j].getColor() == "white":
-                    print('{:^3}'.format('W'), end = '')
+                    print(Fore.GREEN +'{:^3}'.format('W'), end = '')
                 else:
                     temp = self.TheBoard[i][j].getColor()
                 if j != 9:
-                    print(" -> ", end = '')
+                    print(Style.RESET_ALL +" -> ", end = '')
             print()

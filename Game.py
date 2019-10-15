@@ -1,5 +1,6 @@
 # This is the Game class that contains the methods used in creating the game
 import random
+from colorama import Fore, Back, Style
 
 class Game:
     from Board import Board
@@ -435,19 +436,22 @@ class Game:
 
     # Method that prints the board game
     def printGame(self):
+        y_axis = ['A','B','C','D','E','F','G','H','I','J','K','L']
+        x_axis = ['1','2','3','4','5','6','7','8','9','10']
         theBoard = self.getBoard()
         for i in range(0, 12):
+            print(Fore.RED + y_axis[i], end =" ")
             for j in range(0, 10):
                 theCoordinate = theBoard.getCoordinate(i, j)
                 if theCoordinate.getOwner().getName() == 'null':
                     print('{:^3}'.format('-'), end='')
                 elif theCoordinate.getOwner().getName() != "null": ## Should be fixed based off the player
                     if theCoordinate.getOwner() == self.Player1:
-                        print('{:^3}'.format('P1'), end='')
+                        print(Fore.BLUE + '{:^3}'.format('P1'), end='')
                     elif theCoordinate.getOwner() == self.Player2:
-                        print('{:^3}'.format('P2'), end='')
+                        print(Fore.GREEN +'{:^3}'.format('P2'), end='')
                 #elif theCoordinate.getOwner() == 'null':
                 #    print('{:^1}'.format('-'), end='')
                 if j != 9:
-                    print(" -> ", end='')
+                    print(Style.RESET_ALL + " -> ", end='')
             print()

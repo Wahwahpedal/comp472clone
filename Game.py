@@ -72,57 +72,37 @@ class Game:
     # Method that runs the game until at least one player has used up all their tokens
     def playGame(self):
         count = 1
-        stillPlaying = True
-        while stillPlaying:
-            while self.currentPlayer.getTokens() > 0:
-                value = 0
-                if self.currentPlayer is self.Player1:
-                    value = 1
-                if self.currentPlayer is self.Player2:
-                    value = 2
-                print("It is", self.currentPlayer.getName(), "'s turn.")
+        while self.moveCount < 31:
+            value = 0
+            if self.currentPlayer is self.Player1:
+                value = 1
+            if self.currentPlayer is self.Player2:
+                value = 2
+            print("It is", self.currentPlayer.getName(), "'s turn.")
+            if (self.currentPlayer.getTokens() > 0):
+                print("You have", self.currentPlayer.getTokens(), " left.")
                 self.chooseTokenMove(value, count)
-                count = count + 1
-                if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
-                    self.winner = self.currentPlayer
-                    stillPlaying = False
-                    break
-
-                if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
-                    self.winner = self.currentPlayer
-                    stillPlaying = False
-                    break
-                self.printGame()
-                self.switchPlayers()
-                break
-
-            while self.moveCount < 31 and (self.currentPlayer.getTokens() <= 0):
-                print("It is", self.currentPlayer.getName(), "'s turn.")
-                print("You have used up all your tokens. Now, you can only move tokens. You have ", self.moveCount, "moves left.")
+            else:
+                print("You have used up all your tokens. Now, you can only move tokens. There are ", self.moveCount,
+                      "moves left in the game.")
                 self.move(value)
-                count = count + 1
-                if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
-                    self.winner = self.currentPlayer
-                    stillPlaying = False
-                    break
-
-                if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
-                    self.winner = self.currentPlayer
-                    stillPlaying = False
-                    break
-
-                self.printGame()
-                self.switchPlayers()
+            count = count + 1
+            if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
+                self.winner = self.currentPlayer
                 break
 
-            if self.Player1.getTokens() <= 0 and self.Player2.getTokens() <= 0 and self.moveCount == 0:
-                stillPlaying = False
+            if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner(
+                    (int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
+                self.winner = self.currentPlayer
+                break
+
+            self.printGame()
+            self.switchPlayers()
 
         self.printGame()
-
         if (self.winner != "null"):
             print("The winner is", self.currentPlayer.getName())
-        elif self.moveCount == 0:
+        else:
             print("The game resulted in a tie")
 
     # Method to determine if there is a winner

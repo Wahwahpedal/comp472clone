@@ -231,7 +231,7 @@ class Game:
                         accepted_direction.append('sw')
                         accepted_direction.append('sW')
                         accepted_direction.append('Sw')
-                        printed_direction.append('S')
+                        printed_direction.append('SW')
                     if y < 9 and board.getCoordinate(x + 1, y + 1).getOwner().getName() =='null':
                         accepted_direction.append('SE')
                         accepted_direction.append('se')
@@ -256,6 +256,9 @@ class Game:
 
             else:
                 print("The token does not belong to you. Please enter another token coordinate")
+                printed_direction.clear()
+                accepted_direction.clear()
+
 
 
         while True:

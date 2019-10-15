@@ -300,7 +300,6 @@ class Game:
             else:
                 value.split()
                 if value[1].isdigit() and -1 < int(value[1]) < 10 and 96 < ord(value[0]) < 109 or 64 < ord(value[0]) < 77 :
-                    print("TEST")
                     break
                 else:
                     print("Incorrect value entered, try again.\n")

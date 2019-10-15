@@ -44,9 +44,9 @@ class Board:
             for j in range(0,10):
                 value = self.TheBoard[i][j]
                 if self.TheBoard[i][j].getColor() == "black":
-                    print('{:^1}'.format('B'), end = '')
+                    print('{:^3}'.format('B'), end = '')
                 elif self.TheBoard[i][j].getColor() == "white":
-                    print('{:^1}'.format('W'), end = '')
+                    print('{:^3}'.format('W'), end = '')
                 else:
                     temp = self.TheBoard[i][j].getColor()
                 if j != 9:
@@ -58,11 +58,11 @@ class Board:
         for i in range(0, 12):
             for j in range(0, 10):
                 if self.TheBoard[i][j].getOwner().getName() != "null":
-                    print('{:^1}'.format('*'), end='')
+                    print('{:^3}'.format('*'), end='')
                 elif self.TheBoard[i][j].getColor() == "black":
-                    print('{:^1}'.format('B'), end = '')
+                    print('{:^3}'.format('B'), end = '')
                 elif self.TheBoard[i][j].getColor() == "white":
-                    print('{:^1}'.format('W'), end='')
+                    print('{:^3}'.format('W'), end='')
                 if j != 9:
                     print(" -> ", end='')
             print()
@@ -72,9 +72,9 @@ class Board:
         for i in range(0, 12):
             for j in range(0, 10):
                 if self.TheBoard[i][j].getOwner().getName() != "null": ## Should be fixed based off the player
-                    print('{:^1}'.format('*'), end='')
+                    print('{:^3}'.format('*'), end='')
                 else:
-                    print('{:^1}'.format('-'), end='')
+                    print('{:^3}'.format('-'), end='')
                 if j != 9:
                     print(" -> ", end='')
             print()

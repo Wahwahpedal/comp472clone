@@ -82,38 +82,96 @@ class Game:
             self.printGame()
             self.switchPlayers()
 
-        print("The winner is", self.currentPlayer)  #Must check there is actually a winner and the game is not tied especially after 30 moves
+        self.printGame()
+        print("The winner is", self.currentPlayer.getName())
+        #Must check there is actually a winner and the game is not tied especially after 30 moves
 
     # Method to determine if there is a winner
     def isWinner(self, player = Player()):
-         #NOTE: This is not calculating correctly, it needs to do it around all adjacent ones
          x = int(self.lastPieceXCoordinate)
          y = int(self.lastPieceYCoordinate)
-        # corner1x = x - 1
-        # corner1y = y - 1
-        # corner1Owner = self.getBoard().getCoordinate(corner1x, corner1y).getOwner()
-        # corner2x = x - 1
-        # corner2y = y + 1
-        # corner2Owner = self.getBoard().getCoordinate(corner2x, corner2y).getOwner()
-        # corner3x = x + 1
-        # corner3y = y - 1
-        # corner3Owner = self.getBoard().getCoordinate(corner3x, corner3y).getOwner()
-        # corner4x = x + 1
-        # corner4y = y + 1
-        # corner4Owner = self.getBoard().getCoordinate(corner4x, corner4y).getOwner()
-        # crossOneX = x
-        # crossOneY = y-1
-        # crossOneOwner = self.getBoard().getCoordinate(crossOneX, crossOneY).getOwner()
-        # crossTwoX = x
-        # crossOneY = y+1
-        # crossTwoOwner = self.getBoard().getCoordinate(crossTwoX, crossOneY).getOwner()
-        # playerToVerify = player
-        # if playerToVerify == corner1Owner and playerToVerify == corner2Owner and playerToVerify == corner3Owner and playerToVerify == corner4Owner:
-        #     # Verifies if the other player has crossed out the X
-        #     opponent = self.getOpponent(player)
-        #     if crossOneOwner!= opponent and crossTwoOwner != opponent:
-        #         return True
-        # return False
+
+         if self.checkCenterPiece(x, y, player):
+             return True
+
+         corner1x = x - 1
+         corner1y = y - 1
+
+         if self.checkCenterPiece(corner1x, corner1y, player):
+             return True
+
+         corner2x = x - 1
+         corner2y = y + 1
+
+         if self.checkCenterPiece(corner2x, corner2y, player):
+             return True
+
+         corner3x = x + 1
+         corner3y = y - 1
+
+         if self.checkCenterPiece(corner3x, corner3y, player):
+             return True
+
+         corner4x = x + 1
+         corner4y = y + 1
+
+         if self.checkCenterPiece(corner4x, corner4y, player):
+             return True
+         return False
+
+
+    def checkCenterPiece(self, x, y, player = Player()):
+        corner1x = x - 1
+        corner1y = y - 1
+
+        corner2x = x - 1
+        corner2y = y + 1
+
+        corner3x = x + 1
+        corner3y = y - 1
+
+        corner4x = x + 1
+        corner4y = y + 1
+
+        if corner1x < 0 or corner1x > 9 or 0 > corner1y > 11 or corner2x < 0 or corner2x > 9 or corner2y < 0 or corner2y > 11 or corner3x < 0 or corner3x > 9 or corner3y < 0 or corner3y > 11 or corner4x < 0 or corner4x > 9 or corner4y < 0 or corner4y > 11:
+            return False
+
+        corner1Owner = self.getBoard().getCoordinate(corner1x, corner1y).getOwner()
+        if corner1Owner != player:
+            return False
+
+        corner2Owner = self.getBoard().getCoordinate(corner2x, corner2y).getOwner()
+        if corner2Owner != player:
+            return False
+
+
+        corner3Owner = self.getBoard().getCoordinate(corner3x, corner3y).getOwner()
+        if corner3Owner != player:
+            return False
+
+        corner4Owner = self.getBoard().getCoordinate(corner4x, corner4y).getOwner()
+        if corner4Owner != player:
+            return False
+
+        leftPiece = y-1
+        rightpiece = y + 1
+
+        opponent = "null"
+
+        if player is self.Player1:
+            opponent = self.Player2
+        elif player is self.Player2:
+            opponent = self.Player1
+        xValue = x
+
+        leftOpponent = self.getBoard().getCoordinate(xValue, leftPiece).getOwner()
+        rightOpponent = self.getBoard().getCoordinate(xValue, rightpiece).getOwner()
+
+        if leftOpponent == opponent and rightOpponent == opponent:
+            return False
+
+        return True
+
 
     # The Player chooses if they want to place a new token or move a token they own
     def chooseTokenMove(self, value, count):
@@ -147,7 +205,7 @@ class Game:
             theCoordinates = board.getCoordinate(x, y)
             owner = theCoordinates.getOwner()
             if owner.getName() == self.currentPlayer.getName():
-                if x > 0 and board.getCoordinate(x - 1, y).getName() =='null':
+                if x > 0 and board.getCoordinate(x - 1, y).getOwner().getName() =='null':
                     accepted_direction.append('N')
                     accepted_direction.append('n')
                     printed_direction.append('N')
@@ -210,20 +268,36 @@ class Game:
 
         if direction == 'N' or direction == 'n':
             theGame =self.updateGame(x-1,y,value)
+            self.lastPieceXCoordinate = int(x-1)
+            self.lastPieceYCoordinate = int(y)
         elif direction == 'S' or direction == 's':
             theGame = self.updateGame(x + 1, y, value)
+            self.lastPieceXCoordinate = int(x+1)
+            self.lastPieceYCoordinate = int(y)
         elif direction == 'E' or direction == 'e':
             theGame = self.updateGame(x, y + 1, value)
+            self.lastPieceXCoordinate = int(x)
+            self.lastPieceYCoordinate = int(y+1)
         elif direction == 'W' or direction == 'w':
             theGame = self.updateGame(x, y - 1, value)
+            self.lastPieceXCoordinate = int(x)
+            self.lastPieceYCoordinate = int(y-1)
         elif direction == 'NE' or direction == 'ne' or direction == 'nE' or direction == 'Ne':
             theGame = self.updateGame(x - 1, y + 1, value)
+            self.lastPieceXCoordinate = int(x-1)
+            self.lastPieceYCoordinate = int(y+1)
         elif direction == 'NW' or direction == 'nw' or direction == 'nW' or direction == 'Nw':
             theGame = self.updateGame(x - 1, y - 1, value)
+            self.lastPieceXCoordinate = int(x-1)
+            self.lastPieceYCoordinate = int(y-1)
         elif direction == 'SE' or direction == 'se' or direction == 'sE' or direction == 'Se':
             theGame = self.updateGame(x + 1, y + 1, value)
+            self.lastPieceXCoordinate = int(x+1)
+            self.lastPieceYCoordinate = int(y+1)
         elif direction == 'SW' or direction == 'sw' or direction == 'sw' or direction == 'sw':
             theGame = self.updateGame(x + 1, y - 1, value)
+            self.lastPieceXCoordinate = int(x+1)
+            self.lastPieceYCoordinate = int(y-1)
 
         self.theBoard = theGame.getBoard()
         theCoordinates.releaseCoordinate()
@@ -327,13 +401,13 @@ class Game:
         for i in range(0, 12):
             for j in range(0, 10):
                 theCoordinate = theBoard.getCoordinate(i, j)
-                if theCoordinate.getOwner() == 'null':
-                    print('{:^1}'.format('-'), end='')
+                if theCoordinate.getOwner().getName() == 'null':
+                    print('{:^3}'.format('-'), end='')
                 elif theCoordinate.getOwner().getName() != "null": ## Should be fixed based off the player
                     if theCoordinate.getOwner() == self.Player1:
-                        print('{:^1}'.format('P1'), end='')
+                        print('{:^3}'.format('P1'), end='')
                     elif theCoordinate.getOwner() == self.Player2:
-                        print('{:^1}'.format('P2'), end='')
+                        print('{:^3}'.format('P2'), end='')
                 #elif theCoordinate.getOwner() == 'null':
                 #    print('{:^1}'.format('-'), end='')
                 if j != 9:

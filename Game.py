@@ -293,12 +293,14 @@ class Game:
         accepted_letter_coordinate = {'A', 'a', 'B','b', 'c','C', 'd','D','e','E','f', 'F','g','G','h','H','i','I','j','J','k','K','l','L'}
         while True:
             value = input("Enter the position where you want to place/move your token: ")
+            value = value.lower()
             length = len(value)
             if length != 2:
                 print("Incorrect value entered, try again.\n")
             else:
                 value.split()
                 if value[1].isdigit() and -1 < int(value[1]) < 10 and 96 < ord(value[0]) < 109 or 64 < ord(value[0]) < 77 :
+                    print("TEST")
                     break
                 else:
                     print("Incorrect value entered, try again.\n")

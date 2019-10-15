@@ -12,7 +12,7 @@ class Game:
         self.Player1 = Player(name1)
         self.Player2 = Player(name2)
         self.currentPlayer = self.chooseFirstPlayer()
-        self.moveCount = 0
+        self.moveCount = 30
         self.lastPieceXCoordinate = "null"
         self.lastPieceYCoordinate = "null"
         self.lastMoveXCoordinate = "null"
@@ -72,33 +72,57 @@ class Game:
     # Method that runs the game until at least one player has used up all their tokens
     def playGame(self):
         count = 1
-        while self.moveCount < 31 :
-            value = 0
-            if self.currentPlayer is self.Player1:
-                value = 1
-            if self.currentPlayer is self.Player2:
-                value = 2
-            print("It is", self.currentPlayer.getName(), "'s turn.")
-            if(self.currentPlayer.getTokens() > 0):
+        stillPlaying = True
+        while stillPlaying:
+            while self.currentPlayer.getTokens() > 0:
+                value = 0
+                if self.currentPlayer is self.Player1:
+                    value = 1
+                if self.currentPlayer is self.Player2:
+                    value = 2
+                print("It is", self.currentPlayer.getName(), "'s turn.")
                 self.chooseTokenMove(value, count)
-            else:
-                self.move(value)
-            count = count + 1
-            if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
-                self.winner = self.currentPlayer
+                count = count + 1
+                if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
+                    self.winner = self.currentPlayer
+                    stillPlaying = False
+                    break
+
+                if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
+                    self.winner = self.currentPlayer
+                    stillPlaying = False
+                    break
+                self.printGame()
+                self.switchPlayers()
                 break
 
-            if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
-                self.winner = self.currentPlayer
+            while self.moveCount < 31 and (self.currentPlayer.getTokens() <= 0):
+                print("It is", self.currentPlayer.getName(), "'s turn.")
+                print("You have used up all your tokens. Now, you can only move tokens. You have ", self.moveCount, "moves left.")
+                self.move(value)
+                count = count + 1
+                if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
+                    self.winner = self.currentPlayer
+                    stillPlaying = False
+                    break
+
+                if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
+                    self.winner = self.currentPlayer
+                    stillPlaying = False
+                    break
+
+                self.printGame()
+                self.switchPlayers()
                 break
-                
-            self.printGame()
-            self.switchPlayers()
+
+            if self.Player1.getTokens() <= 0 and self.Player2.getTokens() <= 0 and self.moveCount == 0:
+                stillPlaying = False
 
         self.printGame()
-        if (self.winner !="null"):
+
+        if (self.winner != "null"):
             print("The winner is", self.currentPlayer.getName())
-        else:
+        elif self.moveCount == 0:
             print("The game resulted in a tie")
 
     # Method to determine if there is a winner
@@ -189,24 +213,34 @@ class Game:
 
     # The Player chooses if they want to place a new token or move a token they own
     def chooseTokenMove(self, value, count):
-        if count < 3:
-            self.placeToken(value)
-        else:
-            while True:
-                TokenMoveValue = input ("Do you want to place new token(N) or move an existing token(M)?: ")
-                if TokenMoveValue == "N" or TokenMoveValue == "n":
-                    self.placeToken(value)
-                    break
-                elif TokenMoveValue == 'M' or TokenMoveValue == "m":
-                     if moveCount < 31: # number of moves must be 30
-                        self.move(value)
+        if self.moveCount < 31 and (self.currentPlayer.getTokens() != 0):
+            if count < 3:
+                self.placeToken(value)
+            else:
+                while True:
+                    TokenMoveValue = input ("Do you want to place new token(N) or move an existing token(M)?: ")
+                    if TokenMoveValue == "N" or TokenMoveValue == "n":
+                        self.placeToken(value)
                         break
-                     else:
-                        print("Game reached its number of moves ... ")
-                        break
+                    elif TokenMoveValue == 'M' or TokenMoveValue == "m":
+                         if moveCount < 31: # number of moves must be 30
+                            self.move(value)
+                            break
+                         else:
+                            print("Game reached its number of moves ... ")
+                            break
 
-                else:
-                    print('The input is not correct. Please follow instructions below.')
+                    else:
+                        print('The input is not correct. Please follow instructions below.')
+
+        elif self.moveCount < 31 and (self.currentPlayer.getTokens() == 0):
+            print("You do not have any more tokens to place  but can move existing tokens.")
+            if moveCount < 31:  # number of moves must be 30
+                print("You have ", moveCount, "moves left.")
+                self.move(value)
+            else:
+                print("Game reached its number of moves ... ")
+
 
     # The Method gets the coordinates of the token from player, verifies it, and move it
     def move(self, value):
@@ -319,7 +353,7 @@ class Game:
         self.theBoard = theGame.getBoard()
         theCoordinates.releaseCoordinate()
 
-        self.moveCount = moveCount + 1
+        self.moveCount = self.moveCount - 1
         self.wasLastRoundAMove = True
         self.lastMoveXCoordinate = int(x)
         self.lastMoveYCoordinate = int(y)
@@ -404,11 +438,13 @@ class Game:
         coordinate = self.theBoard.getCoordinate(x, y)
         if value == 1:
             self.theBoard = self.theBoard.updateBoardWithPlayer(x,y,self.Player1)
-            self.Player1.decreaseTokens()
+            if self.Player1.getTokens() > 0:
+                self.Player1.decreaseTokens()
             if self.Player1.getFirstMove():
                 self.Player1.toggleFirstMove()
         elif value == 2:
-            self.Player2.decreaseTokens()
+            if self.Player2.getTokens() > 0:
+                self.Player2.decreaseTokens()
             self.theBoard  = self.theBoard.updateBoardWithPlayer(x,y,self.Player2)
             if self.Player2.getFirstMove():
                 self.Player2.toggleFirstMove()

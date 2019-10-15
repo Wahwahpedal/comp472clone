@@ -18,6 +18,7 @@ class Game:
         self.lastMoveXCoordinate = "null"
         self.lastMoveYCoordinate = "null"
         self.wasLastRoundAMove = False
+        self.winner = "null"
 
     # Getter that returns an object of type board
     def getBoard(self):
@@ -71,28 +72,34 @@ class Game:
     # Method that runs the game until at least one player has used up all their tokens
     def playGame(self):
         count = 1
-        while self.Player1.getTokens() != 0 or self.Player2.getTokens() != 0 or self.moveCount < 31 :
+        while self.moveCount < 31 :
             value = 0
             if self.currentPlayer is self.Player1:
                 value = 1
             if self.currentPlayer is self.Player2:
                 value = 2
             print("It is", self.currentPlayer.getName(), "'s turn.")
-            self.chooseTokenMove(value, count)
+            if(self.currentPlayer.getTokens() > 0):
+                self.chooseTokenMove(value, count)
+            else:
+                self.move(value)
             count = count + 1
             if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
+                self.winner = self.currentPlayer
                 break
 
             if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
-                self.switchPlayers()
+                self.winner = self.currentPlayer
                 break
                 
             self.printGame()
             self.switchPlayers()
 
         self.printGame()
-        print("The winner is", self.currentPlayer.getName())
-        #Must check there is actually a winner and the game is not tied especially after 30 moves
+        if (self.winner !="null"):
+            print("The winner is", self.currentPlayer.getName())
+        else:
+            print("The game resulted in a tie")
 
     # Method to determine if there is a winner
     def isWinner(self, x, y, player = Player()):
@@ -177,6 +184,7 @@ class Game:
             return False
 
         return True
+
 
 
     # The Player chooses if they want to place a new token or move a token they own

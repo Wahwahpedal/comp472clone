@@ -290,6 +290,7 @@ class Game:
 
     # Helper method that asks the user for the position where they want to place the token
     def chooseCoordinates(self):
+        accepted_letter_coordinate = {'A', 'a', 'B','b', 'c','C', 'd','D','e','E','f', 'F','g','G','h','H','i','I','j','J','k','K','l','L'}
         while True:
             value = input("Enter the position where you want to place/move your token: ")
             length = len(value)
@@ -297,7 +298,7 @@ class Game:
                 print("Incorrect value entered, try again.\n")
             else:
                 value.split()
-                if -1 < int(value[1]) < 10 and 96 < ord(value[0]) < 109 or 64 < ord(value[0]) < 77:
+                if value[1].isdigit() and -1 < int(value[1]) < 10 and 96 < ord(value[0]) < 109 or 64 < ord(value[0]) < 77 :
                     break
                 else:
                     print("Incorrect value entered, try again.\n")
@@ -325,6 +326,8 @@ class Game:
             x = 10
         elif value[0] == 'L' or value[0] == 'l':
             x = 11
+
+
         y = value[1]
         y = int(y)
         x = int(x)

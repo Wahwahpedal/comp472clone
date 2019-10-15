@@ -1,3 +1,4 @@
+# This is the player class that contains all the methods that a player can do in the game
 class Player:
 
     # Default Constructor
@@ -14,7 +15,7 @@ class Player:
     def setName(self, name):
         self.name = name
 
-    # Setter to return if it's the player's turn?
+    # Setter to return if it's the player's turn
     def setPlayerIsTurn(self, isTurn):
         self.isTurn = isTurn
 

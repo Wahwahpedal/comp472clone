@@ -1,9 +1,5 @@
-#import numpy
-#import Coordinate
-
+# This is the board class that creates the board for the game
 class Board:
-    from Coordinate import Coordinate
-    from Player import Player
 
     # Constructor that initializes the board to be a 2D-Array of type coordinates
     def __init__ (self):
@@ -38,7 +34,6 @@ class Board:
         print(self.TheBoard[row][column])
 
     # Method that prints the colors on the board
-    # NOTE: MIGHT NOT BE NEEDED
     def printBoardColors(self):
         for i in range(0,12):
             for j in range(0,10):
@@ -51,30 +46,4 @@ class Board:
                     temp = self.TheBoard[i][j].getColor()
                 if j != 9:
                     print(" -> ", end = '')
-            print()
-
-    # NOTE: MIGHT NOT BE NEEDED
-    def printBoardWithTokens(self):
-        for i in range(0, 12):
-            for j in range(0, 10):
-                if self.TheBoard[i][j].getOwner().getName() != "null":
-                    print('{:^3}'.format('*'), end='')
-                elif self.TheBoard[i][j].getColor() == "black":
-                    print('{:^3}'.format('B'), end = '')
-                elif self.TheBoard[i][j].getColor() == "white":
-                    print('{:^3}'.format('W'), end='')
-                if j != 9:
-                    print(" -> ", end='')
-            print()
-
-    # NOTE: MIGHT NOT BE NEEDED
-    def printBoardOnlyTokens(self):
-        for i in range(0, 12):
-            for j in range(0, 10):
-                if self.TheBoard[i][j].getOwner().getName() != "null": ## Should be fixed based off the player
-                    print('{:^3}'.format('*'), end='')
-                else:
-                    print('{:^3}'.format('-'), end='')
-                if j != 9:
-                    print(" -> ", end='')
             print()

@@ -1,3 +1,4 @@
+# This is the coordinate class that contains all the information pertaining to the coordinates on a board
 class Coordinate:
     from Player import Player
 
@@ -15,7 +16,6 @@ class Coordinate:
     def releaseCoordinate(self):
         from Player import Player
         self.owner = Player()
-
 
     # Setter that sets the color of the coordinate
     def setColor(self, color):

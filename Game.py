@@ -15,6 +15,9 @@ class Game:
         self.moveCount = 0
         self.lastPieceXCoordinate = "null"
         self.lastPieceYCoordinate = "null"
+        self.lastMoveXCoordinate = "null"
+        self.lastMoveYCoordinate = "null"
+        self.wasLastRoundAMove = False
 
     # Getter that returns an object of type board
     def getBoard(self):
@@ -77,8 +80,13 @@ class Game:
             print("It is", self.currentPlayer.getName(), "'s turn.")
             self.chooseTokenMove(value, count)
             count = count + 1
-            if self.isWinner(self.currentPlayer):
+            if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
                 break
+
+            if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
+                self.switchPlayers()
+                break
+                
             self.printGame()
             self.switchPlayers()
 
@@ -87,9 +95,7 @@ class Game:
         #Must check there is actually a winner and the game is not tied especially after 30 moves
 
     # Method to determine if there is a winner
-    def isWinner(self, player = Player()):
-         x = int(self.lastPieceXCoordinate)
-         y = int(self.lastPieceYCoordinate)
+    def isWinner(self, x, y, player = Player()):
 
          if self.checkCenterPiece(x, y, player):
              return True
@@ -306,6 +312,9 @@ class Game:
         theCoordinates.releaseCoordinate()
 
         self.moveCount = moveCount + 1
+        self.wasLastRoundAMove = True
+        self.lastMoveXCoordinate = int(x)
+        self.lastMoveYCoordinate = int(y)
 
         return theGame
 
@@ -377,6 +386,7 @@ class Game:
 
         self.lastPieceXCoordinate = int(x)
         self.lastPieceYCoordinate = int(y)
+        self.wasLastRoundAMove = False
         return theGame
 
 

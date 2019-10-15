@@ -133,7 +133,7 @@ class Game:
         corner4x = x + 1
         corner4y = y + 1
 
-        if corner1x < 0 or corner1x > 9 or 0 > corner1y > 11 or corner2x < 0 or corner2x > 9 or corner2y < 0 or corner2y > 11 or corner3x < 0 or corner3x > 9 or corner3y < 0 or corner3y > 11 or corner4x < 0 or corner4x > 9 or corner4y < 0 or corner4y > 11:
+        if corner1x < 0 or corner1x > 11 or 0 > corner1y > 9 or corner2x < 0 or corner2x > 11 or corner2y < 0 or corner2y > 9 or corner3x < 0 or corner3x > 11 or corner3y < 0 or corner3y > 9 or corner4x < 0 or corner4x > 11 or corner4y < 0 or corner4y > 9:
             return False
 
         corner1Owner = self.getBoard().getCoordinate(corner1x, corner1y).getOwner()

@@ -291,16 +291,19 @@ class Game:
 
     # Helper method that asks the user for the position where they want to place the token
     def chooseCoordinates(self):
-        accepted_letter_coordinate = {'A', 'a', 'B','b', 'c','C', 'd','D','e','E','f', 'F','g','G','h','H','i','I','j','J','k','K','l','L'}
+        length3  = False
         while True:
             value = input("Enter the position where you want to place/move your token: ")
             value = value.lower()
             length = len(value)
-            if length != 2:
+            if length < 1 and length > 3 :
                 print("Incorrect value entered, try again.\n")
             else:
                 value.split()
-                if value[1].isdigit() and -1 < int(value[1]) < 10 and 96 < ord(value[0]) < 109 or 64 < ord(value[0]) < 77 :
+                if length == 3 and int(value[1]) == 1 and int(value[2]) == 0:
+                    length3 = True
+                    break
+                if value[1].isdigit() and 0 < int(value[1]) < 11 and 96 < ord(value[0]) < 109 or 64 < ord(value[0]) < 77 :
                     break
                 else:
                     print("Incorrect value entered, try again.\n")
@@ -329,9 +332,11 @@ class Game:
         elif value[0] == 'L' or value[0] == 'l':
             x = 11
 
-
-        y = value[1]
-        y = int(y)
+        if length3:
+            y = 9
+        else:
+            y = value[1]
+            y = int(y) - 1
         x = int(x)
         return x, y
 
@@ -437,15 +442,15 @@ class Game:
 
     # Method that prints the board game
     def printGame(self):
-        y_axis = ['A','B','C','D','E','F','G','H','I','J','K','L']
+        y_axis = ['A ','B ','C ','D ','E ','F ','G ','H ','I ','J ','K ','L ']
         x_axis = ['1','2','3','4','5','6','7','8','9','10']
         theBoard = self.getBoard()
         for i in range(0, 12):
-            print(Fore.RED + y_axis[i], end =" ")
+            print(Fore.RED + '\033[1m' + y_axis[i], end =" ")
             for j in range(0, 10):
                 theCoordinate = theBoard.getCoordinate(i, j)
                 if theCoordinate.getOwner().getName() == 'null':
-                    print('{:^3}'.format('-'), end='')
+                    print(Style.RESET_ALL +'{:^3}'.format('--'), end='')
                 elif theCoordinate.getOwner().getName() != "null": ## Should be fixed based off the player
                     if theCoordinate.getOwner() == self.Player1:
                         print(Fore.BLUE + '{:^3}'.format('P1'), end='')
@@ -456,3 +461,5 @@ class Game:
                 if j != 9:
                     print(Style.RESET_ALL + " -> ", end='')
             print()
+        print(Fore.RED + '\033[1m' + '    1       2     3      4      5      6      7      8      9     10' + Style.RESET_ALL )
+        print("=====")

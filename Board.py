@@ -38,7 +38,7 @@ class Board:
     def printBoardColors(self):
         y_axis = ['A','B','C','D','E','F','G','H','I','J','K','L']
         for i in range(0,12):
-            print(Fore.RED + y_axis[i], end =" ")
+            print(Fore.RED + '\033[1m'+ y_axis[i], end =" ")
             for j in range(0,10):
                 value = self.TheBoard[i][j]
                 if self.TheBoard[i][j].getColor() == "black":
@@ -50,3 +50,5 @@ class Board:
                 if j != 9:
                     print(Style.RESET_ALL +" -> ", end = '')
             print()
+        print(Fore.RED + '\033[1m' + '    1       2     3      4      5      6      7      8      9     10' + Style.RESET_ALL )
+        

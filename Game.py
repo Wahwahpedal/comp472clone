@@ -296,7 +296,7 @@ class Game:
             value = input("Enter the position where you want to place/move your token: ")
             value = value.lower()
             length = len(value)
-            if length < 1 and length > 3 :
+            if length !=2 and length != 3 :
                 print("Incorrect value entered, try again.\n")
             else:
                 value.split()

@@ -1,13 +1,17 @@
 # This is the Game class that contains the methods used in creating the game
 import random
-from colorama import Fore, Back, Style
+from random import randrange
+
+import numpy as np
+
+from colorama import Fore, Style
+
 
 class Game:
-    from Board import Board
     from Player import Player
 
     # Default Constructor
-    def __init__ (self, name1, name2):
+    def __init__(self, name1, name2):
         from Board import Board
         from Player import Player
         self.theBoard = Board()
@@ -21,6 +25,7 @@ class Game:
         self.lastMoveYCoordinate = "null"
         self.wasLastRoundAMove = False
         self.winner = "null"
+        self.computerMoves = np.array([])
 
     # Getter that returns an object of type board
     def getBoard(self):
@@ -43,7 +48,7 @@ class Game:
         self.Player2 = player
 
     # Helper Method to get the opposite player
-    def getOpponent(self, player = Player()):
+    def getOpponent(self, player=Player()):
         if player == self.Player1:
             return self.Player2
         return self.Player1
@@ -54,7 +59,7 @@ class Game:
 
     # Method that randomly chooses the play who should start
     def chooseFirstPlayer(self):
-        value = random.randint(1,2)
+        value = random.randint(1, 2)
         if value == 1:
             return self.Player1
         else:
@@ -78,10 +83,10 @@ class Game:
             if self.currentPlayer is self.Player2:
                 value = 2
                 print("It is Player 2 (P2)'s turn, ", self.currentPlayer.getName(), ":")
-            if (self.currentPlayer.getTokens() > 0): #If player has tokens, they can either place token or move tokens
+            if (self.currentPlayer.getTokens() > 0):  # If player has tokens, they can either place token or move tokens
                 print("You have", self.currentPlayer.getTokens(), "tokens remaining.")
                 self.chooseTokenMove(value, count)
-            else: # Once the player has used all their tokens, they can only move tokens around
+            else:  # Once the player has used all their tokens, they can only move tokens around
                 print("You have used up all your tokens. Now, you can only move tokens. There are ", self.moveCount,
                       "moves left in the game.")
                 self.move(value)
@@ -105,37 +110,35 @@ class Game:
             print("The game resulted in a tie")
 
     # Method to determine if there is a winner
-    def isWinner(self, x, y, player = Player()):
+    def isWinner(self, x, y, player=Player()):
 
-         if self.checkCorners(x, y, player):
-             return True
+        if self.checkCorners(x, y, player):
+            return True
 
-         corner1x = x - 1
-         corner1y = y - 1
+        corner1x = x - 1
+        corner1y = y - 1
 
-         if self.checkCorners(corner1x, corner1y, player):
-             return True
+        if self.checkCorners(corner1x, corner1y, player):
+            return True
 
-         corner2x = x - 1
-         corner2y = y + 1
+        corner2x = x - 1
+        corner2y = y + 1
 
-         if self.checkCorners(corner2x, corner2y, player):
-             return True
+        if self.checkCorners(corner2x, corner2y, player):
+            return True
 
-         corner3x = x + 1
-         corner3y = y - 1
+        corner3x = x + 1
+        corner3y = y - 1
 
-         if self.checkCorners(corner3x, corner3y, player):
-             return True
+        if self.checkCorners(corner3x, corner3y, player):
+            return True
 
-         corner4x = x + 1
-         corner4y = y + 1
+        corner4x = x + 1
+        corner4y = y + 1
 
-         if self.checkCorners(corner4x, corner4y, player):
-             return True
-         return False
-
-
+        if self.checkCorners(corner4x, corner4y, player):
+            return True
+        return False
 
     # The Player chooses if they want to place a new token or move a token they own
     def chooseTokenMove(self, value, count):
@@ -144,15 +147,15 @@ class Game:
                 self.placeToken(value)
             else:
                 while True:
-                    TokenMoveValue = input ("Do you want to place new token(N) or move an existing token(M)?: ")
+                    TokenMoveValue = input("Do you want to place new token(N) or move an existing token(M)?: ")
                     if TokenMoveValue == "N" or TokenMoveValue == "n":
                         self.placeToken(value)
                         break
                     elif TokenMoveValue == 'M' or TokenMoveValue == "m":
-                         if self.moveCount < 31: # number of moves must be 30
+                        if self.moveCount < 31:  # number of moves must be 30
                             self.move(value)
                             break
-                         else:
+                        else:
                             print("Game reached its number of moves ... ")
                             break
 
@@ -167,61 +170,76 @@ class Game:
             else:
                 print("Game reached its number of moves ... ")
 
-
     # The Method gets the coordinates of the token from player, verifies it, and move it
     def move(self, value):
         board = self.getBoard()
         accepted_direction = []
         printed_direction = []
+        direction = 0
 
         while True:
-            x, y = self.chooseCoordinates()
+            if value == 1:
+                x, y = self.chooseCoordinates()
+            elif value == 2:
+                position = self.chooseMove()
+                thePosition = position
+                position.split()
+                x = int(self.getValue(position[0]))
+                y = (int(position[1])) - 1
             theCoordinates = board.getCoordinate(x, y)
             owner = theCoordinates.getOwner()
             if owner.getName() == self.currentPlayer.getName():
-                if x > 0 and board.getCoordinate(x - 1, y).getOwner().getName() =='null':
+                if x > 0 and board.getCoordinate(x - 1, y).getOwner().getName() == 'null':
                     accepted_direction.append('N')
-                    accepted_direction.append('n')
-                    printed_direction.append('N')
-                    if y > 0 and board.getCoordinate(x - 1, y - 1).getOwner().getName() =='null':
+                    if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                        accepted_direction.append('n')
+                        printed_direction.append('N')
+                    if y > 0 and board.getCoordinate(x - 1, y - 1).getOwner().getName() == 'null':
                         accepted_direction.append('NW')
-                        accepted_direction.append('nw')
-                        accepted_direction.append('nW')
-                        accepted_direction.append('Nw')
-                        printed_direction.append('NW')
-                    if y < 9 and board.getCoordinate(x - 1, y + 1).getOwner().getName() =='null':
+                        if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                            accepted_direction.append('nw')
+                            accepted_direction.append('nW')
+                            accepted_direction.append('Nw')
+                            printed_direction.append('NW')
+                    if y < 9 and board.getCoordinate(x - 1, y + 1).getOwner().getName() == 'null':
                         accepted_direction.append('NE')
-                        accepted_direction.append('ne')
-                        accepted_direction.append('nE')
-                        accepted_direction.append('Ne')
-                        printed_direction.append('NE')
+                        if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                            accepted_direction.append('ne')
+                            accepted_direction.append('nE')
+                            accepted_direction.append('Ne')
+                            printed_direction.append('NE')
 
-                if x < 11 and board.getCoordinate(x + 1, y).getOwner().getName() =='null':
+                if x < 11 and board.getCoordinate(x + 1, y).getOwner().getName() == 'null':
                     accepted_direction.append('S')
-                    accepted_direction.append('s')
-                    printed_direction.append('S')
-                    if y > 0 and board.getCoordinate(x + 1, y - 1).getOwner().getName() =='null':
+                    if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                        accepted_direction.append('s')
+                        printed_direction.append('S')
+                    if y > 0 and board.getCoordinate(x + 1, y - 1).getOwner().getName() == 'null':
                         accepted_direction.append('SW')
-                        accepted_direction.append('sw')
-                        accepted_direction.append('sW')
-                        accepted_direction.append('Sw')
-                        printed_direction.append('SW')
-                    if y < 9 and board.getCoordinate(x + 1, y + 1).getOwner().getName() =='null':
+                        if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                            accepted_direction.append('sw')
+                            accepted_direction.append('sW')
+                            accepted_direction.append('Sw')
+                            printed_direction.append('SW')
+                    if y < 9 and board.getCoordinate(x + 1, y + 1).getOwner().getName() == 'null':
                         accepted_direction.append('SE')
-                        accepted_direction.append('se')
-                        accepted_direction.append('sE')
-                        accepted_direction.append('Se')
-                        printed_direction.append('SE')
+                        if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                            accepted_direction.append('se')
+                            accepted_direction.append('sE')
+                            accepted_direction.append('Se')
+                            printed_direction.append('SE')
 
-                if y > 0 and board.getCoordinate(x, y - 1).getOwner().getName() =='null':
+                if y > 0 and board.getCoordinate(x, y - 1).getOwner().getName() == 'null':
                     accepted_direction.append('W')
-                    accepted_direction.append('w')
-                    printed_direction.append('W')
+                    if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                        accepted_direction.append('w')
+                        printed_direction.append('W')
 
-                if y < 9 and board.getCoordinate(x, y + 1).getOwner().getName() =='null':
+                if y < 9 and board.getCoordinate(x, y + 1).getOwner().getName() == 'null':
                     accepted_direction.append('E')
-                    accepted_direction.append('e')
-                    printed_direction.append('E')
+                    if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                        accepted_direction.append('e')
+                        printed_direction.append('E')
 
                 if len(accepted_direction) > 0:
                     break
@@ -233,49 +251,60 @@ class Game:
                 printed_direction.clear()
                 accepted_direction.clear()
 
-
-
         while True:
-            print("You may chose the following cardinal directions: " + ', '.join(printed_direction))
-            direction = input("Please enter a cardinal direction to move the token:")
-            if direction in accepted_direction:
+            if value == 1:
+                print("You may chose the following cardinal directions: " + ', '.join(printed_direction))
+                direction = input("Please enter a cardinal direction to move the token:")
+                if direction in accepted_direction:
+                    break
+                else:
+                    print("Please enter a valid direction")
+            elif value == 2:
+                s = " "
+                s = s.join(accepted_direction)
+                s = s.split()
+                direction = self.chooseDirection(s)
+                print("The direction chosen was: ", direction)
                 break
-            else:
-                print("Please enter a valid direction")
 
         decrease = False
         if direction == 'N' or direction == 'n':
-            theGame =self.updateGame(x-1,y,value, decrease)
-            self.lastPieceXCoordinate = int(x-1)
+            theGame = self.updateGame(x - 1, y, value, decrease)
+            self.lastPieceXCoordinate = int(x - 1)
             self.lastPieceYCoordinate = int(y)
         elif direction == 'S' or direction == 's':
             theGame = self.updateGame(x + 1, y, value, decrease)
-            self.lastPieceXCoordinate = int(x+1)
+            self.lastPieceXCoordinate = int(x + 1)
             self.lastPieceYCoordinate = int(y)
         elif direction == 'E' or direction == 'e':
             theGame = self.updateGame(x, y + 1, value, decrease)
             self.lastPieceXCoordinate = int(x)
-            self.lastPieceYCoordinate = int(y+1)
+            self.lastPieceYCoordinate = int(y + 1)
         elif direction == 'W' or direction == 'w':
             theGame = self.updateGame(x, y - 1, value, decrease)
             self.lastPieceXCoordinate = int(x)
-            self.lastPieceYCoordinate = int(y-1)
+            self.lastPieceYCoordinate = int(y - 1)
         elif direction == 'NE' or direction == 'ne' or direction == 'nE' or direction == 'Ne':
             theGame = self.updateGame(x - 1, y + 1, value, decrease)
-            self.lastPieceXCoordinate = int(x-1)
-            self.lastPieceYCoordinate = int(y+1)
+            self.lastPieceXCoordinate = int(x - 1)
+            self.lastPieceYCoordinate = int(y + 1)
         elif direction == 'NW' or direction == 'nw' or direction == 'nW' or direction == 'Nw':
             theGame = self.updateGame(x - 1, y - 1, value, decrease)
-            self.lastPieceXCoordinate = int(x-1)
-            self.lastPieceYCoordinate = int(y-1)
+            self.lastPieceXCoordinate = int(x - 1)
+            self.lastPieceYCoordinate = int(y - 1)
         elif direction == 'SE' or direction == 'se' or direction == 'sE' or direction == 'Se':
             theGame = self.updateGame(x + 1, y + 1, value, decrease)
-            self.lastPieceXCoordinate = int(x+1)
-            self.lastPieceYCoordinate = int(y+1)
+            self.lastPieceXCoordinate = int(x + 1)
+            self.lastPieceYCoordinate = int(y + 1)
         elif direction == 'SW' or direction == 'sw' or direction == 'sw' or direction == 'sw':
             theGame = self.updateGame(x + 1, y - 1, value, decrease)
-            self.lastPieceXCoordinate = int(x+1)
-            self.lastPieceYCoordinate = int(y-1)
+            self.lastPieceXCoordinate = int(x + 1)
+            self.lastPieceYCoordinate = int(y - 1)
+        if value == 2:
+            newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate + 1)
+            self.computerMoves = np.where(self.computerMoves == thePosition, newCoordinate, self.computerMoves)
+            print("The computer has moved from", thePosition, " to ", newCoordinate)
+            print(self.computerMoves) # NOTE: USED FOR TESTING
 
         self.theBoard = theGame.getBoard()
         theCoordinates.releaseCoordinate()
@@ -287,23 +316,22 @@ class Game:
 
         return theGame
 
-
-
     # Helper method that asks the user for the position where they want to place the token
     def chooseCoordinates(self):
-        length3  = False
+        length3 = False
         while True:
             value = input("Enter the position where you want to place/move your token: ")
             value = value.lower()
             length = len(value)
-            if length !=2 and length != 3 :
+            if length != 2 and length != 3:
                 print("Incorrect value entered, try again.\n")
             else:
                 value.split()
                 if length == 3 and int(value[1]) == 1 and int(value[2]) == 0:
                     length3 = True
                     break
-                if value[1].isdigit() and 0 < int(value[1]) < 11 and 96 < ord(value[0]) < 109 or 64 < ord(value[0]) < 77 :
+                if value[1].isdigit() and 0 < int(value[1]) < 11 and 96 < ord(value[0]) < 109 or 64 < ord(
+                        value[0]) < 77:
                     break
                 else:
                     print("Incorrect value entered, try again.\n")
@@ -349,15 +377,15 @@ class Game:
             theCoordinates = board.getCoordinate(x, y)
             owner = theCoordinates.getOwner()
 
-            #thePlayer
+            # thePlayer
             if value == 1:
                 thePlayer = self.Player1
             if value == 2:
                 thePlayer = self.Player2
 
             decrease = True
-            if (owner.getName() =='null'):
-                theGame =self.updateGame(x,y,value, decrease)
+            if (owner.getName() == 'null'):
+                theGame = self.updateGame(x, y, value, decrease)
 
             else:
                 print("Invalid Move. Please try again")
@@ -425,15 +453,15 @@ class Game:
         self.theBoard = self.getBoard()
         coordinate = self.theBoard.getCoordinate(x, y)
         if value == 1:
-            self.theBoard = self.theBoard.updateBoardWithPlayer(x,y,self.Player1)
+            self.theBoard = self.theBoard.updateBoardWithPlayer(x, y, self.Player1)
             if self.Player1.getTokens() > 0 and shouldDecrease == True:
                 self.Player1.decreaseTokens()
             if self.Player1.getFirstMove():
                 self.Player1.toggleFirstMove()
         elif value == 2:
+            self.theBoard = self.theBoard.updateBoardWithPlayer(x, y, self.Player2)
             if self.Player2.getTokens() > 0 and shouldDecrease == True:
                 self.Player2.decreaseTokens()
-            self.theBoard  = self.theBoard.updateBoardWithPlayer(x,y,self.Player2)
             if self.Player2.getFirstMove():
                 self.Player2.toggleFirstMove()
         self.lastPieceXCoordinate = x
@@ -442,24 +470,148 @@ class Game:
 
     # Method that prints the board game
     def printGame(self):
-        y_axis = ['A ','B ','C ','D ','E ','F ','G ','H ','I ','J ','K ','L ']
-        x_axis = ['1','2','3','4','5','6','7','8','9','10']
+        y_axis = ['A ', 'B ', 'C ', 'D ', 'E ', 'F ', 'G ', 'H ', 'I ', 'J ', 'K ', 'L ']
+        x_axis = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
         theBoard = self.getBoard()
         for i in range(0, 12):
-            print(Fore.RED + '\033[1m' + y_axis[i], end =" ")
+            print(Fore.RED + '\033[1m' + y_axis[i], end=" ")
             for j in range(0, 10):
                 theCoordinate = theBoard.getCoordinate(i, j)
                 if theCoordinate.getOwner().getName() == 'null':
-                    print(Style.RESET_ALL +'{:^3}'.format('--'), end='')
-                elif theCoordinate.getOwner().getName() != "null": ## Should be fixed based off the player
+                    print(Style.RESET_ALL + '{:^3}'.format('--'), end='')
+                elif theCoordinate.getOwner().getName() != "null":  ## Should be fixed based off the player
                     if theCoordinate.getOwner() == self.Player1:
                         print(Fore.BLUE + '{:^3}'.format('P1'), end='')
                     elif theCoordinate.getOwner() == self.Player2:
-                        print(Fore.GREEN +'{:^3}'.format('P2'), end='')
-                #elif theCoordinate.getOwner() == 'null':
+                        print(Fore.GREEN + '{:^3}'.format('P2'), end='')
+                # elif theCoordinate.getOwner() == 'null':
                 #    print('{:^1}'.format('-'), end='')
                 if j != 9:
                     print(Style.RESET_ALL + " -> ", end='')
             print()
-        print(Fore.RED + '\033[1m' + '    1       2     3      4      5      6      7      8      9     10' + Style.RESET_ALL )
+        print(
+            Fore.RED + '\033[1m' + '    1       2     3      4      5      6      7      8      9     10' + Style.RESET_ALL)
         print("=====")
+
+        # Method that runs the game until at least one player has used up all their tokens
+
+    def playGameWithComputer(self):
+        count = 1
+        while self.moveCount < 31:
+            value = 0
+            if self.currentPlayer is self.Player2:
+                value = 2
+                print("It is the computer's turn:")
+                TokenMoveValue = self.computerPlaceOrMove()
+                if TokenMoveValue == "N" or TokenMoveValue == "n" or (count < 3):
+                    if not (count < 3):
+                        print("The computer has chosen to place a new token")
+                    self.computerPlaceToken()
+                    print(self.computerMoves)  # NOTE: USED FOR TESTING
+                    count = count + 1
+                elif TokenMoveValue == 'M' or TokenMoveValue == "m":  # need to upate this
+                    print("The computer has chosen to move a token")
+                    if self.moveCount < 31:  # number of moves must be 30
+                        self.move(value)
+                    else:
+                        print("Game reached its number of moves ... ")
+            elif self.currentPlayer is self.Player1:
+                value = 1
+                print("It is Player 1 (P1)'s turn, ", self.currentPlayer.getName(), ":")
+                if (
+                        self.currentPlayer.getTokens() > 0):  # If player has tokens, they can either place token or move tokens
+                    print("You have", self.currentPlayer.getTokens(), "tokens remaining.")
+                    self.chooseTokenMove(value, count)
+                else:  # Once the player has used all their tokens, they can only move tokens around
+                    print("You have used up all your tokens. Now, you can only move tokens. There are ", self.moveCount,
+                          "moves left in the game.")
+                    self.move(value)
+                count = count + 1
+
+            if self.isWinner(int(self.lastPieceXCoordinate), int(self.lastPieceYCoordinate), self.currentPlayer):
+                self.winner = self.currentPlayer
+                break
+
+            if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner(
+                    (int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
+                self.winner = self.currentPlayer
+                break
+
+            self.printGame()
+            self.switchPlayers()
+
+        self.printGame()
+        if (self.winner != "null"):
+            print("The winner is", self.currentPlayer.getName())
+        else:
+            print("The game resulted in a tie")
+
+    # This function randomly generates a computers choice to place new token or move existing token
+    def computerPlaceOrMove(self):
+        options = ["N", "M"]
+        return random.choice(options)
+
+    # This function randomly generates where to place the token
+    def computerPlaceToken(self):
+        board = self.getBoard()
+        theGame = "null"
+        while theGame == "null":
+            x = (randrange(11))
+            y = (randrange(10))
+            charOfX = self.getCharacter(x)
+            theCoordinates = board.getCoordinate(x, y)
+            owner = theCoordinates.getOwner()
+
+            decrease = True
+            if (owner.getName() == 'null'):
+                thePosition = str(charOfX) + str(y + 1)
+                print("The computer has placed a token on", thePosition, ".")
+                theGame = self.updateGame(x, y, 2, decrease)
+                self.computerMoves = (np.append(self.computerMoves, thePosition))
+            else:
+                continue
+
+        self.lastPieceXCoordinate = int(x)
+        self.lastPieceYCoordinate = int(y)
+        self.wasLastRoundAMove = False
+        return theGame
+
+    def getValue(self, value):
+        switcher = {
+            'A': 0,
+            'B': 1,
+            'C': 2,
+            'D': 3,
+            'E': 4,
+            'F': 5,
+            'G': 6,
+            'H': 7,
+            'I': 8,
+            'J': 9,
+            'K': 10,
+            'L': 11
+        }
+        return switcher.get(value, "Invalid information")
+
+    def getCharacter(self, value):
+        switcher = {
+            0: 'A',
+            1: 'B',
+            2: 'C',
+            3: 'D',
+            4: 'E',
+            5: 'F',
+            6: 'G',
+            7: 'H',
+            8: 'I',
+            9: 'J',
+            10: 'K',
+            11: 'L'
+        }
+        return switcher.get(value, "Invalid information")
+
+    def chooseMove(self):
+        return random.choice(self.computerMoves)
+
+    def chooseDirection(self, availablepositions):
+        return random.choice(availablepositions)

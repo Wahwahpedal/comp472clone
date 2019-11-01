@@ -18,7 +18,7 @@ class Game:
         self.Player1 = Player(name1)
         self.Player2 = Player(name2)
         self.currentPlayer = self.chooseFirstPlayer()
-        self.moveCount = 30
+        self.moveCount = 0
         self.lastPieceXCoordinate = "null"
         self.lastPieceYCoordinate = "null"
         self.lastMoveXCoordinate = "null"
@@ -152,7 +152,7 @@ class Game:
                         self.placeToken(value)
                         break
                     elif TokenMoveValue == 'M' or TokenMoveValue == "m":
-                        if self.moveCount < 31:  # number of moves must be 30
+                        if self.moveCount < 31:  # number of moves must be equal to or less than 30
                             self.move(value)
                             break
                         else:
@@ -312,7 +312,7 @@ class Game:
         self.theBoard = theGame.getBoard()
         theCoordinates.releaseCoordinate()
 
-        self.moveCount = self.moveCount - 1
+        self.moveCount = self.moveCount + 1
         self.wasLastRoundAMove = True
         self.lastMoveXCoordinate = int(x)
         self.lastMoveYCoordinate = int(y)
@@ -501,6 +501,7 @@ class Game:
     def playGameWithComputer(self):
         count = 1
         while self.moveCount < 31:
+            print(self.moveCount) #For testing
             value = 0
             if self.currentPlayer is self.Player2:
                 value = 2
@@ -547,7 +548,7 @@ class Game:
             self.printGame()
             self.switchPlayers()
 
-        if self.moveCount >= 30:  # number of moves must be 30
+        if self.moveCount <= 0:  # number of moves must be 30
             print("Game reached its number of moves ... ")
 
         self.printGame()

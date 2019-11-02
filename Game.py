@@ -193,11 +193,12 @@ class Game:
             theCoordinates = board.getCoordinate(x, y)
             owner = theCoordinates.getOwner()
             if owner.getName() == self.currentPlayer.getName():
-                if x > 0 and board.getCoordinate(x - 1, y).getOwner().getName() == 'null':
-                    accepted_direction.append('N')
-                    if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
-                        accepted_direction.append('n')
-                        printed_direction.append('N')
+                if x > 0:
+                    if board.getCoordinate(x - 1, y).getOwner().getName() == 'null':
+                        accepted_direction.append('N')
+                        if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
+                            accepted_direction.append('n')
+                            printed_direction.append('N')
                     if y > 0 and board.getCoordinate(x - 1, y - 1).getOwner().getName() == 'null':
                         accepted_direction.append('NW')
                         if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
@@ -213,11 +214,12 @@ class Game:
                             accepted_direction.append('Ne')
                             printed_direction.append('NE')
 
-                if x < 11 and board.getCoordinate(x + 1, y).getOwner().getName() == 'null':
-                    accepted_direction.append('S')
-                    if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
-                        accepted_direction.append('s')
-                        printed_direction.append('S')
+                if x < 11:
+                    if board.getCoordinate(x + 1, y).getOwner().getName() == 'null':
+                        accepted_direction.append('S')
+                        if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
+                            accepted_direction.append('s')
+                            printed_direction.append('S')
                     if y > 0 and board.getCoordinate(x + 1, y - 1).getOwner().getName() == 'null':
                         accepted_direction.append('SW')
                         if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer

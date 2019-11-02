@@ -17,7 +17,7 @@ while True:
 if (version == "C") or (version == "c"):
     playerOneName = input("Enter your name: ")
     playerTwoName = "Computer"
-    startGame = Game(playerOneName,playerTwoName) #Creating an object of type Game
+    startGame = Game(playerOneName,playerTwoName, True) #Creating an object of type Game
     # Plays the game with the computer
     print("Here's the initial board:")
     startGame.getBoard().printBoardColors()
@@ -29,7 +29,7 @@ if (version == "C") or (version == "c"):
 if (version == "P") or (version == "p"):
     playerOneName = input("Enter player one's name: ")
     playerTwoName = input("Enter player two's name: ")
-    startGame = Game(playerOneName,playerTwoName) #Creating an object of type Game
+    startGame = Game(playerOneName,playerTwoName, False) #Creating an object of type Game
     # Plays the game
     print("Here's the initial board:")
     startGame.getBoard().printBoardColors()

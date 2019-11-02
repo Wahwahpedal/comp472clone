@@ -11,7 +11,7 @@ class Game:
     from Player import Player
 
     # Default Constructor
-    def __init__(self, name1, name2):
+    def __init__(self, name1, name2, playWithComputer):
         from Board import Board
         from Player import Player
         self.theBoard = Board()
@@ -26,6 +26,7 @@ class Game:
         self.wasLastRoundAMove = False
         self.winner = "null"
         self.computerMoves = np.array([])
+        self.computerOpponent = playWithComputer
 
     # Getter that returns an object of type board
     def getBoard(self):
@@ -178,9 +179,9 @@ class Game:
         direction = 0
 
         while True:
-            if value == 1:
+            if value == 1 or self.computerOpponent == False:
                 x, y = self.chooseCoordinates()
-            elif value == 2:
+            elif value == 2 and self.computerOpponent == True:
                 position = self.chooseMove()
                 thePosition = position
                 position.split()
@@ -194,19 +195,19 @@ class Game:
             if owner.getName() == self.currentPlayer.getName():
                 if x > 0 and board.getCoordinate(x - 1, y).getOwner().getName() == 'null':
                     accepted_direction.append('N')
-                    if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                    if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
                         accepted_direction.append('n')
                         printed_direction.append('N')
                     if y > 0 and board.getCoordinate(x - 1, y - 1).getOwner().getName() == 'null':
                         accepted_direction.append('NW')
-                        if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                        if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
                             accepted_direction.append('nw')
                             accepted_direction.append('nW')
                             accepted_direction.append('Nw')
                             printed_direction.append('NW')
                     if y < 9 and board.getCoordinate(x - 1, y + 1).getOwner().getName() == 'null':
                         accepted_direction.append('NE')
-                        if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                        if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
                             accepted_direction.append('ne')
                             accepted_direction.append('nE')
                             accepted_direction.append('Ne')
@@ -214,19 +215,19 @@ class Game:
 
                 if x < 11 and board.getCoordinate(x + 1, y).getOwner().getName() == 'null':
                     accepted_direction.append('S')
-                    if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                    if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
                         accepted_direction.append('s')
                         printed_direction.append('S')
                     if y > 0 and board.getCoordinate(x + 1, y - 1).getOwner().getName() == 'null':
                         accepted_direction.append('SW')
-                        if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                        if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
                             accepted_direction.append('sw')
                             accepted_direction.append('sW')
                             accepted_direction.append('Sw')
                             printed_direction.append('SW')
                     if y < 9 and board.getCoordinate(x + 1, y + 1).getOwner().getName() == 'null':
                         accepted_direction.append('SE')
-                        if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                        if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
                             accepted_direction.append('se')
                             accepted_direction.append('sE')
                             accepted_direction.append('Se')
@@ -234,13 +235,13 @@ class Game:
 
                 if y > 0 and board.getCoordinate(x, y - 1).getOwner().getName() == 'null':
                     accepted_direction.append('W')
-                    if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                    if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
                         accepted_direction.append('w')
                         printed_direction.append('W')
 
                 if y < 9 and board.getCoordinate(x, y + 1).getOwner().getName() == 'null':
                     accepted_direction.append('E')
-                    if value == 1:  # Allows for user to enter lower or capitals but is not needed for the computer
+                    if value == 1 or self.computerOpponent == False:  # Allows for user to enter lower or capitals but is not needed for the computer
                         accepted_direction.append('e')
                         printed_direction.append('E')
 
@@ -255,14 +256,14 @@ class Game:
                 accepted_direction.clear()
 
         while True:
-            if value == 1:
+            if value == 1 or self.computerOpponent == False:
                 print("You may chose the following cardinal directions: " + ', '.join(printed_direction))
                 direction = input("Please enter a cardinal direction to move the token:")
                 if direction in accepted_direction:
                     break
                 else:
                     print("Please enter a valid direction")
-            elif value == 2:
+            elif value == 2 and self.computerOpponent == True:
                 s = " "
                 s = s.join(accepted_direction)
                 s = s.split()
@@ -303,11 +304,11 @@ class Game:
             theGame = self.updateGame(x + 1, y - 1, value, decrease)
             self.lastPieceXCoordinate = int(x + 1)
             self.lastPieceYCoordinate = int(y - 1)
-        if value == 2:
+        if value == 2 and self.computerOpponent == True:
             newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate + 1)
             self.computerMoves = np.where(self.computerMoves == thePosition, newCoordinate, self.computerMoves)
             print("The computer has moved from", thePosition, " to ", newCoordinate)
-            print(self.computerMoves) # NOTE: USED FOR TESTING
+            print(self.computerMoves)  # NOTE: USED FOR TESTING
 
         self.theBoard = theGame.getBoard()
         theCoordinates.releaseCoordinate()

@@ -334,7 +334,9 @@ class Game:
                 if length == 3 and int(value[1]) == 1 and int(value[2]) == 0:
                     length3 = True
                     break
-                if value[1].isdigit() and 0 < int(value[1]) < 11 and 96 < ord(value[0]) < 109 or 64 < ord(
+                elif length == 3 and (not(int(value[1]) == 1 and int(value[2]) == 0)):
+                    print("Incorrect value entered, try again.\n")
+                elif value[1].isdigit() and 0 < int(value[1]) < 11 and 96 < ord(value[0]) < 109 or 64 < ord(
                         value[0]) < 77:
                     break
                 else:

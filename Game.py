@@ -96,9 +96,8 @@ class Game:
                 self.winner = self.currentPlayer
                 break
 
-            if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner(
-                    (int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
-                self.winner = self.currentPlayer
+            if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((self.lastMoveXCoordinate + 1), self.lastMoveYCoordinate, self.getOpponent()):
+                self.winner = self.getOpponent()
                 break
 
             self.printGame()
@@ -106,7 +105,7 @@ class Game:
 
         self.printGame()
         if (self.winner != "null"):
-            print("The winner is", self.currentPlayer.getName())
+            print("The winner is", self.winner.getName())
         else:
             print("The game resulted in a tie")
 
@@ -545,9 +544,8 @@ class Game:
                 self.winner = self.currentPlayer
                 break
 
-            if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner(
-                    (int(self.lastMoveXCoordinate) + 1), int(self.lastMoveYCoordinate), self.getOpponent()):
-                self.winner = self.currentPlayer
+            if self.wasLastRoundAMove and 0 < int(self.lastMoveYCoordinate) < 11 and self.isWinner((self.lastMoveXCoordinate + 1), self.lastMoveYCoordinate, self.getOpponent()):
+                self.winner = self.getOpponent()
                 break
 
             self.printGame()
@@ -558,7 +556,7 @@ class Game:
 
         self.printGame()
         if (self.winner != "null"):
-            print("The winner is", self.currentPlayer.getName())
+            print("The winner is", self.winner.getName())
         else:
             print("The game resulted in a tie")
 

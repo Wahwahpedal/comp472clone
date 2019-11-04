@@ -26,6 +26,7 @@ class Game:
         self.wasLastRoundAMove = False
         self.winner = "null"
         self.computerMoves = np.array([])
+        self.player1Moves = np.array([])
         self.computerOpponent = playWithComputer
 
     # Getter that returns an object of type board
@@ -305,6 +306,12 @@ class Game:
             theGame = self.updateGame(x + 1, y - 1, value, decrease)
             self.lastPieceXCoordinate = int(x + 1)
             self.lastPieceYCoordinate = int(y - 1)
+        elif value ==1 and self.computerOpponent == True:
+            newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate +1)
+            xCoordinate = self.getCharacter(x)
+            yCoordinate = y+1
+            thePosition = str(xCoordinate) + str(yCoordinate)
+            self.player1Moves = np.where(self.player1Moves == thePosition, newCoordinate, self.player1Moves)
         if value == 2 and self.computerOpponent == True:
             newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate + 1)
             self.computerMoves = np.where(self.computerMoves == thePosition, newCoordinate, self.computerMoves)
@@ -393,6 +400,9 @@ class Game:
             decrease = True
             if (owner.getName() == 'null'):
                 theGame = self.updateGame(x, y, value, decrease)
+            if self.computerOpponent and value == 1:
+                thePosition = str(self.getCharacter(x)) + str(y+1)
+                self.player1Moves = (np.append(self.player1Moves, thePosition))
 
             else:
                 print("Invalid Move. Please try again")
@@ -505,7 +515,8 @@ class Game:
     def playGameWithComputer(self):
         count = 1
         while self.moveCount < 31:
-            print(self.moveCount) #For testing
+            print("The human's moves have been", self.player1Moves) #For testing
+            print("Computer moves", self.computerMoves)
             value = 0
             if self.currentPlayer is self.Player2:
                 value = 2

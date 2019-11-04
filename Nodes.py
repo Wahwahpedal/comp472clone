@@ -5,7 +5,7 @@ import numpy
 
 
 class Nodes:
-    def __init__(self, x, y, board=Board(), oponentPlayer = Player(), computerPlayer = Player()):
+    def __init__(self, board = Board(), oponentPlayer = Player(), computerPlayer = Player(), x= 0, y = 0):
         self.parentBoard = board.cloneBoard()
         self.childrenBoards = "null"
         self.opponentPlayer = oponentPlayer
@@ -25,8 +25,7 @@ class Nodes:
         for i in range(0, 12):
             for j in range(0, 10):
                 if self.parentBoard.getCoordinate(i,j).getOwner().getName() == "null":
-                    tempBoard = self.parentBoard
-                    self.childrenBoards = Nodes(self.parentBoard.updateBoardWithPlayer(i, j, player), i,j, self.opponentPlayer, self.computerPlayer)
+                    self.childrenBoards = Nodes(self.parentBoard.updateBoardWithPlayer(i, j, player), self.opponentPlayer, self.computerPlayer, i, j)
 
         #for i in len(self.childrenBoards)): #NOTE: Need to figure this out with another depth
             #self.GenerateChildren(depth - 1);

@@ -1,9 +1,7 @@
 # This is the Game class that contains the methods used in creating the game
 import random
 from random import randrange
-
 import numpy as np
-
 from colorama import Fore, Style
 
 
@@ -517,6 +515,7 @@ class Game:
         while self.moveCount < 31:
             print("The human's moves have been", self.player1Moves) #For testing
             print("Computer moves", self.computerMoves)
+            self.getGameRectangle(self.player1Moves, self.computerMoves)
             value = 0
             if self.currentPlayer is self.Player2:
                 value = 2
@@ -640,3 +639,11 @@ class Game:
 
     def chooseDirection(self, availablepositions):
         return random.choice(availablepositions)
+
+    def getGameRectangle(self, playerArray, computerArray):
+        boardGrid = np.concatenate([playerArray, computerArray])
+        boardGrid.sort()
+        print(boardGrid)
+        return boardGrid
+
+

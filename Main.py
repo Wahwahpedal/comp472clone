@@ -1,7 +1,7 @@
 # This is the main class where the game is played
 from colorama import Fore, Back, Style
 from Game import Game
-from Nodes import TreeNodes
+from Nodes import Nodes
 
 
 # Intro Message
@@ -24,7 +24,7 @@ if (version == "C") or (version == "c"):
     startGame.getBoard().printBoardColors()
     print(Style.RESET_ALL + "=====")
     print("Let's get started!")
-    testing = TreeNodes(startGame.getBoard(), startGame.getPlayer1(), startGame.getPlayer2()) #NOTE: USED FOR TESTING
+    testing = Nodes(startGame.getBoard(), startGame.getPlayer1(), startGame.getPlayer2()) #NOTE: USED FOR TESTING
     testing.generateChildren(1) #NOTE: USED FOR TESTING
     #print(startGame.computerPlaceToken()) For testing
     startGame.playGameWithComputer()

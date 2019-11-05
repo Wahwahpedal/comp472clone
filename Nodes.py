@@ -1,11 +1,12 @@
 # This class will be used for creating the boards to analyze the depths
 from Board import Board
 from Player import Player
+from Game import Game
 import numpy
 
 
 class Nodes:
-    def __init__(self, board = Board(), oponentPlayer = Player(), computerPlayer = Player(), x= 0, y = 0):
+    def __init__(self, game, board = Board(), oponentPlayer = Player(), computerPlayer = Player(),  x= 0, y = 0):
         self.parentBoard = board.cloneBoard()
         self.childrenBoards = "null"
         self.opponentPlayer = oponentPlayer
@@ -13,6 +14,7 @@ class Nodes:
         self.value = 0
         self.xvalue = x
         self.yvalue = y
+        self.game = game
 
 
     def generateChildren(self, depth):
@@ -25,7 +27,7 @@ class Nodes:
         for i in range(0, 12):
             for j in range(0, 10):
                 if self.parentBoard.getCoordinate(i,j).getOwner().getName() == "null":
-                    self.childrenBoards = Nodes(self.parentBoard.updateBoardWithPlayer(i, j, player), self.opponentPlayer, self.computerPlayer, i, j)
+                    self.childrenBoards = Nodes(self.game, self.parentBoard.updateBoardWithPlayer(i, j, player), self.opponentPlayer, self.computerPlayer, i, j)
 
         #for i in len(self.childrenBoards)): #NOTE: Need to figure this out with another depth
             #self.GenerateChildren(depth - 1);

@@ -645,6 +645,15 @@ class Game:
     def getGameRectangle(self, playerArray, computerArray):
         boardGrid = np.concatenate([playerArray, computerArray])
         boardGrid.sort()
+        if len(boardGrid) > 1:
+            print(boardGrid[0][0])
+            print(boardGrid[-1][0])
+            numGrid = np.char.lstrip(boardGrid,'A''B''C''D''E''F''G''H''I''J''K''L')
+            numGrid= numGrid.astype(int)
+            numGrid.sort()
+            print(numGrid[0])
+            print(numGrid[-1])
+
         print(boardGrid)
         return boardGrid
 

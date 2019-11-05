@@ -28,7 +28,7 @@ class Player:
 
     # Getter that returns a boolean
     def getIsTurn(self):
-        return this.isTurn
+        return self.isTurn
 
     #Method used once the player has moved in the game
     def toggleFirstMove(self):

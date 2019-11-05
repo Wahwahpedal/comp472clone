@@ -26,6 +26,7 @@ class Game:
         self.computerMoves = np.array([])
         self.player1Moves = np.array([])
         self.computerOpponent = playWithComputer
+        self.rectangleCoordinates = np.array([11,0,9,0])
 
     # Getter that returns an object of type board
     def getBoard(self):
@@ -174,7 +175,6 @@ class Game:
         board = self.getBoard()
         accepted_direction = []
         printed_direction = []
-        direction = 0
 
         while True:
             if value == 1 or self.computerOpponent == False:
@@ -304,13 +304,13 @@ class Game:
             theGame = self.updateGame(x + 1, y - 1, value, decrease)
             self.lastPieceXCoordinate = int(x + 1)
             self.lastPieceYCoordinate = int(y - 1)
-        elif value ==1 and self.computerOpponent == True:
-            newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate +1)
+        if value ==1 and self.computerOpponent == True:
+            newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate + 1)
             xCoordinate = self.getCharacter(x)
             yCoordinate = y+1
             thePosition = str(xCoordinate) + str(yCoordinate)
             self.player1Moves = np.where(self.player1Moves == thePosition, newCoordinate, self.player1Moves)
-        if value == 2 and self.computerOpponent == True:
+        elif value == 2 and self.computerOpponent == True:
             newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate + 1)
             self.computerMoves = np.where(self.computerMoves == thePosition, newCoordinate, self.computerMoves)
             print("The computer has moved from", thePosition, " to ", newCoordinate)
@@ -645,7 +645,16 @@ class Game:
     def getGameRectangle(self, playerArray, computerArray):
         boardGrid = np.concatenate([playerArray, computerArray])
         boardGrid.sort()
-        print(boardGrid)
+        if len(boardGrid) > 1:
+            self.rectangleCoordinates[0] = ord(boardGrid[0][0])-65
+            self.rectangleCoordinates[1] = ord(boardGrid[-1][0]) - 65
+            numGrid = np.char.lstrip(boardGrid,'A''B''C''D''E''F''G''H''I''J''K''L')
+            numGrid= numGrid.astype(int)
+            numGrid.sort()
+            self.rectangleCoordinates[2] = numGrid[0]
+            self.rectangleCoordinates[3] = numGrid[-1]
+
+        print(self.rectangleCoordinates)
         return boardGrid
 
 

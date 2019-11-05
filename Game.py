@@ -175,7 +175,6 @@ class Game:
         board = self.getBoard()
         accepted_direction = []
         printed_direction = []
-        direction = 0
 
         while True:
             if value == 1 or self.computerOpponent == False:
@@ -305,13 +304,13 @@ class Game:
             theGame = self.updateGame(x + 1, y - 1, value, decrease)
             self.lastPieceXCoordinate = int(x + 1)
             self.lastPieceYCoordinate = int(y - 1)
-        elif value ==1 and self.computerOpponent == True:
-            newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate +1)
+        if value ==1 and self.computerOpponent == True:
+            newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate + 1)
             xCoordinate = self.getCharacter(x)
             yCoordinate = y+1
             thePosition = str(xCoordinate) + str(yCoordinate)
             self.player1Moves = np.where(self.player1Moves == thePosition, newCoordinate, self.player1Moves)
-        if value == 2 and self.computerOpponent == True:
+        elif value == 2 and self.computerOpponent == True:
             newCoordinate = str(self.getCharacter(self.lastPieceXCoordinate)) + str(self.lastPieceYCoordinate + 1)
             self.computerMoves = np.where(self.computerMoves == thePosition, newCoordinate, self.computerMoves)
             print("The computer has moved from", thePosition, " to ", newCoordinate)

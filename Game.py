@@ -332,7 +332,9 @@ class Game:
                 print("Incorrect value entered, try again.\n")
             else:
                 value.split()
-                if length == 3 and int(value[1]) == 1 and int(value[2]) == 0:
+                if length == 3 and (not value[1].isdigit() or not value[2].isdigit()):
+                    print("Incorrect value entered, try again.\n")
+                elif length == 3 and int(value[1]) == 1 and int(value[2]) == 0:
                     length3 = True
                     break
                 elif length == 3 and (not(int(value[1]) == 1 and int(value[2]) == 0)):

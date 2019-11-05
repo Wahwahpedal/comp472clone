@@ -20,12 +20,18 @@ class Nodes:
     def generateChildren(self, depth):
         if depth <= 0:
             return
+        minX = self.game.rectangleCoordinates[0]
+        maxX = self.game.rectangleCoordinates[1]
+        minY = self.game.rectangleCoordinates[2]
+        maxY = self.game.rectangleCoordinates[3]
+        print(self.game.rectangleCoordinates)
+
         if depth == 1:
             player = self.computerPlayer
         elif depth == 2:
             player = self.opponentPlayer
-        for i in range(0, 12):
-            for j in range(0, 10):
+        for i in range(minX, maxX):
+            for j in range(minY, maxY):
                 if self.parentBoard.getCoordinate(i,j).getOwner().getName() == "null":
                     self.childrenBoards = Nodes(self.game, self.parentBoard.updateBoardWithPlayer(i, j, player), self.opponentPlayer, self.computerPlayer, i, j)
 

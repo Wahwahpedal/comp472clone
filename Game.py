@@ -654,7 +654,6 @@ class Game:
             self.rectangleCoordinates[2] = numGrid[0]
             self.rectangleCoordinates[3] = numGrid[-1]
 
-        print(boardGrid)
         print(self.rectangleCoordinates)
         return boardGrid
 

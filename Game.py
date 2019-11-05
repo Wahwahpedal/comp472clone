@@ -95,10 +95,9 @@ class Game:
                 self.winner = self.currentPlayer
                 break
 
-            if self.wasLastRoundAMove and 0 <= self.lastMoveYCoordinate < 11:
-                if self.isWinner(int(self.lastMoveXCoordinate + 1), int(self.lastMoveYCoordinate), self.getOpponent(self.currentPlayer)):
-                    self.winner = self.getOpponent(self.currentPlayer)
-                    break
+            if self.wasLastRoundAMove and 0 < self.lastMoveXCoordinate < 11 and self.isWinner((self.lastMoveXCoordinate + 1), self.lastMoveYCoordinate, self.getOpponent(self.currentPlayer)):
+                self.winner = self.getOpponent(self.currentPlayer)
+                break
 
             self.printGame()
             self.switchPlayers()
@@ -557,10 +556,9 @@ class Game:
                 self.winner = self.currentPlayer
                 break
 
-            if self.wasLastRoundAMove and 0 <= int(self.lastMoveYCoordinate) < 11:
-                if self.isWinner((self.lastMoveXCoordinate + 1), self.lastMoveYCoordinate, self.getOpponent(self.currentPlayer)):
-                    self.winner = self.getOpponent(self.currentPlayer)
-                    break
+            if self.wasLastRoundAMove and 0 < self.lastMoveXCoordinate < 11 and self.isWinner((self.lastMoveXCoordinate + 1), self.lastMoveYCoordinate, self.getOpponent(self.currentPlayer)):
+                self.winner = self.getOpponent(self.currentPlayer)
+                break
 
             self.printGame()
             self.switchPlayers()

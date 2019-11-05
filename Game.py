@@ -26,6 +26,7 @@ class Game:
         self.computerMoves = np.array([])
         self.player1Moves = np.array([])
         self.computerOpponent = playWithComputer
+        self.rectangleCoordinates = np.array([11,0,9,0])
 
     # Getter that returns an object of type board
     def getBoard(self):
@@ -646,15 +647,16 @@ class Game:
         boardGrid = np.concatenate([playerArray, computerArray])
         boardGrid.sort()
         if len(boardGrid) > 1:
-            print(boardGrid[0][0])
-            print(boardGrid[-1][0])
+            self.rectangleCoordinates[0] = ord(boardGrid[0][0])-65
+            self.rectangleCoordinates[1] = ord(boardGrid[-1][0]) - 65
             numGrid = np.char.lstrip(boardGrid,'A''B''C''D''E''F''G''H''I''J''K''L')
             numGrid= numGrid.astype(int)
             numGrid.sort()
-            print(numGrid[0])
-            print(numGrid[-1])
+            self.rectangleCoordinates[2] = numGrid[0]
+            self.rectangleCoordinates[3] = numGrid[-1]
 
         print(boardGrid)
+        print(self.rectangleCoordinates)
         return boardGrid
 
 

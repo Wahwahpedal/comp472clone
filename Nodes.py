@@ -36,8 +36,8 @@ class Nodes:
         else:
             maxY = self.game.rectangleCoordinates[3] + buffer + 1
 
-        print("Rectangle")
-        print(self.game.rectangleCoordinates)
+        print("Rectangle") #informative/debug
+        print(self.game.rectangleCoordinates) #informative/debug
 
         arr = [minX, maxX, minY, maxY]
         return arr
@@ -46,8 +46,8 @@ class Nodes:
         if depth <= 0:
             return
         arr = self.limitSearchSpace(depth)  # MAY WANT TO CHANGE BUFFER
-        print("THIS IS THE RECTANGLE BOUNDARIES")   # Testing
-        print(arr)  # Testing
+        print("THIS IS THE RECTANGLE BOUNDARIES")   #informative/debug
+        print(arr)  #informative/debug
         if depth == 1:
             player = self.computerPlayer
         elif depth == 2:
@@ -56,7 +56,8 @@ class Nodes:
             for j in range(arr[2], arr[3]):
                 if self.parentBoard.getCoordinate(i,j).getOwner().getName() == "null":
                     self.childrenBoards = Nodes(self.game, self.parentBoard.updateBoardWithPlayer(i, j, player), self.opponentPlayer, self.computerPlayer, i, j)
-
+                     # self.game.updateGame(i, j, 1, False) # Testing purposes
+                     # self.game.printGame() # Testing purposes
 
         #for i in len(self.childrenBoards)): #NOTE: Need to figure this out with another depth
             #self.GenerateChildren(depth - 1);

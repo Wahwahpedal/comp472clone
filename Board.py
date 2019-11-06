@@ -36,6 +36,12 @@ class Board:
         self.TheBoard[x][y].setOwner(player)
         return self
 
+    # MTesting for the nodes
+    def updateTempBoard(self, x, y, player):
+        return self.cloneBoard().getCoordinate(x, y).setOwner(player)
+
+
+
     # Method that prints a certain field on a board
     def printCertainField(self, row, column):
         print(self.TheBoard[row][column])
@@ -58,3 +64,4 @@ class Board:
             print()
         print(
             Fore.RED + '\033[1m' + '    1       2     3      4      5      6      7      8      9     10' + Style.RESET_ALL)
+

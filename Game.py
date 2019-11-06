@@ -526,7 +526,7 @@ class Game:
                 print("It is the computer's turn:")
                 TokenMoveValue = self.computerPlaceOrMove()
                 testing = Nodes(self,self.theBoard, self.Player1, self.Player2) #NOTE: USED FOR TESTING
-                testing.generateChildren(1) # NOTE: USED FOR TESTING
+                #testing.generateChildren(1) # NOTE: USED FOR TESTING
                 if (TokenMoveValue == "N" or TokenMoveValue == "n" or (count < 3)) and (self.currentPlayer.getTokens() > 0):
                     if (not(count < 3)) and self.currentPlayer.getTokens() > 0:
                         print("The computer has chosen to place a new token")

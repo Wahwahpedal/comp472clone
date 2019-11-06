@@ -14,6 +14,15 @@ class Nodes:
         self.xvalue = x
         self.yvalue = y
         self.game = game
+        self.counterForChildrenBoards = 0
+        self.openList = np.array([])
+        self.closedList = np.array([])
+
+    def getChildrenBoards(self):
+        return self.childrenBoards
+
+    def getValue(self):
+        return self.value
 
     def limitSearchSpace(self, buffer=1):
         if (self.game.rectangleCoordinates[0] - buffer) < 0:
@@ -52,17 +61,24 @@ class Nodes:
             player = self.computerPlayer
         elif depth == 2:
             player = self.opponentPlayer
-        for i in range(arr[0],arr[1]):
-            for j in range(arr[2], arr[3]):
+        for i in range(0, 12): #Used for testing until lines 66 and 67 are corrected
+            for j in range(0, 10): #Used for testing until lines 66 and 67 are corrected
+        #for i in range(arr[0],arr[1]):
+            #for j in range(arr[2], arr[3]):
                 if self.parentBoard.getCoordinate(i,j).getOwner().getName() == "null":
                     self.childrenBoards = Nodes(self.game, self.parentBoard.updateBoardWithPlayer(i, j, player), self.opponentPlayer, self.computerPlayer, i, j)
+                    self.counterForChildrenBoards = self.counterForChildrenBoards + 1
+                    self.openList = (np.append(self.openList, self.childrenBoards)) #Creates an open list with the children
+
                      # self.game.updateGame(i, j, 1, False) # Testing purposes
                      # self.game.printGame() # Testing purposes
+        print("testing1", self.counterForChildrenBoards) #Used for testing
+        print("testing2", len(self.openList)) #Used for testing
 
         #for i in len(self.childrenBoards)): #NOTE: Need to figure this out with another depth
             #self.GenerateChildren(depth - 1);
 
-    def calculateScore(self, childBoard, index, depth, player = Player()):  #Used to calculate the score of the board
+    def calculateScorePerChild(self, childBoard, index, depth, player = Player()):  #Used to calculate the score of the board
         arr = self.limitSearchSpace(depth)  # MAY WANT TO CHANGE BUFFER
         # xCoordinate = self.childrenBoards[index].getCoordinate()
         totalPoints = 0
@@ -70,7 +86,17 @@ class Nodes:
             for j in range(arr[2], arr[3]):
                 if childBoard[index].getCoordinate(i,j).getOwner().getName() == player.getName():
                     totalPoints = totalPoints + 5 #This is used just for testing at the moment
-        return totalPoints
+        self.value = totalPoints
+
+    def getMaxOfChildren(self, board = Board()): #Function to be used to determine which child should be used when Max is playing
+        maxChild = "null"
+        maxValue = 0;
+        for i in self.counterForChildrenBoards:
+            if self.openList[i].getValue() > maxValue:
+                maxChild = self.openList[i]
+                maxValue = self.openList[i].getValue()
+        return maxChild
+
 
     def isPieceTouching(self, x, y, player=Player()):
         corner1x = x - 1

@@ -655,8 +655,8 @@ class Game:
             numGrid = np.char.lstrip(boardGrid,'A''B''C''D''E''F''G''H''I''J''K''L')
             numGrid= numGrid.astype(int)
             numGrid.sort()
-            self.rectangleCoordinates[2] = numGrid[0]
-            self.rectangleCoordinates[3] = numGrid[-1]
+            self.rectangleCoordinates[2] = numGrid[0] - 1
+            self.rectangleCoordinates[3] = numGrid[-1] - 1
 
         print(boardGrid)
 

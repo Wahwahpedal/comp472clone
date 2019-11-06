@@ -1,4 +1,6 @@
 # This is the player class that contains all the methods that a player can do in the game
+import copy
+
 class Player:
 
     # Default Constructor
@@ -14,6 +16,9 @@ class Player:
     # Setter that returns a string
     def setName(self, name):
         self.name = name
+
+    def clonePlayer(self):
+        return copy.deepcopy(self)
 
     # Setter to return if it's the player's turn
     def setPlayerIsTurn(self, isTurn):

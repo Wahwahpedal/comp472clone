@@ -9,6 +9,7 @@ from colorama import Fore, Style
 
 class Game:
     from Player import Player
+    from Board import Board
 
     # Default Constructor
     def __init__(self, name1, name2, playWithComputer):
@@ -512,8 +513,33 @@ class Game:
             Fore.RED + '\033[1m' + '    1       2     3      4      5      6      7      8      9     10' + Style.RESET_ALL)
         print("=====")
 
-        # Method that runs the game until at least one player has used up all their tokens
+    # TESTING: Method that prints the board game for a different Board
+    def printGameForBoard(self, newBoard):
+        y_axis = ['A ', 'B ', 'C ', 'D ', 'E ', 'F ', 'G ', 'H ', 'I ', 'J ', 'K ', 'L ']
+        x_axis = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        theBoard = newBoard
+        for i in range(0, 12):
+            print(Fore.RED + '\033[1m' + y_axis[i], end=" ")
+            for j in range(0, 10):
+                theCoordinate = theBoard.getCoordinate(i, j)
+                if theCoordinate.getOwner().getName() == 'null':
+                    print(Style.RESET_ALL + '{:^3}'.format('--'), end='')
+                elif theCoordinate.getOwner().getName() != "null":  ## Should be fixed based off the player
+                    if theCoordinate.getOwner().getName() == self.Player1.getName():
+                        print(Fore.BLUE + '{:^3}'.format('P1'), end='')
+                    elif theCoordinate.getOwner().getName() == self.Player2.getName():
+                        print(Fore.GREEN + '{:^3}'.format('P2'), end='')
+                # elif theCoordinate.getOwner() == 'null':
+                #    print('{:^1}'.format('-'), end='')
+                if j != 9:
+                    print(Style.RESET_ALL + " -> ", end='')
+            print()
+        print(
+            Fore.RED + '\033[1m' + '    1       2     3      4      5      6      7      8      9     10' + Style.RESET_ALL)
+        print("=====")
+        return
 
+    # Method that runs the game until at least one player has used up all their tokens
     def playGameWithComputer(self):
         count = 1
         while self.moveCount < 31:
@@ -639,6 +665,10 @@ class Game:
             11: 'L'
         }
         return switcher.get(value, "Invalid information")
+
+    def updateGameBoard(self, board = Board()):
+        self.theBoard = board
+        return self
 
     def chooseMove(self):
         return random.choice(self.computerMoves)

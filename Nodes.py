@@ -1,6 +1,7 @@
 # This class will be used for creating the boards to analyze the depths
 from Board import Board
 from Player import Player
+import numpy as np
 
 
 class Nodes:
@@ -47,20 +48,19 @@ class Nodes:
         arr = self.limitSearchSpace(depth)  # MAY WANT TO CHANGE BUFFER
         print("THIS IS THE RECTANGLE BOUNDARIES")   #informative/debug
         print(arr)  #informative/debug
-        if depth % 2 == 1:
+        if depth == 1:
             player = self.computerPlayer
-        else:
+        elif depth == 2:
             player = self.opponentPlayer
         for i in range(arr[0],arr[1]):
             for j in range(arr[2], arr[3]):
                 if self.parentBoard.getCoordinate(i,j).getOwner().getName() == "null":
                     self.childrenBoards = Nodes(self.game, self.parentBoard.updateBoardWithPlayer(i, j, player), self.opponentPlayer, self.computerPlayer, i, j)
-                    self.game.updateGame(i, j, 1, False) # Testing purposes
-                    self.game.printGame() # Testing purposes
+                     # self.game.updateGame(i, j, 1, False) # Testing purposes
+                     # self.game.printGame() # Testing purposes
 
-        #for i in len(self.childrenBoards): #NOTE: Need to figure this out with another depth
-            #self.GenerateChildren(depth - 1)
-
+        #for i in len(self.childrenBoards)): #NOTE: Need to figure this out with another depth
+            #self.GenerateChildren(depth - 1);
 
     def calculateScore(self, childBoard, index, depth, player = Player()):  #Used to calculate the score of the board
         arr = self.limitSearchSpace(depth)  # MAY WANT TO CHANGE BUFFER
